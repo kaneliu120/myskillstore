@@ -7,7 +7,6 @@ import { Zap, Gem, Wallet, Brain, Globe, TrendingUp, Search } from 'lucide-react
 import ProductCard from '@/components/product/ProductCard';
 import { Input } from '@/components/ui/input';
 
-// Mock Data
 const LATEST_PRODUCTS = [
   { id: '1', title: 'Advanced Trading Agent', price: 150, author: 'CryptoWizard', category: 'Finance' },
   { id: '2', title: 'SEO Blog Writer Pro', price: 49, author: 'ContentKing', category: 'Marketing' },
@@ -27,7 +26,6 @@ export default function HomePage() {
             <Link href="/" className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 text-transparent bg-clip-text">
               My Skill Shop
             </Link>
-            {/* Search Bar - AxureStyle */}
             <div className="hidden md:flex items-center relative w-96">
               <Search className="absolute left-3 w-4 h-4 text-slate-500" />
               <Input 
@@ -50,27 +48,39 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-16 px-4 overflow-hidden bg-gradient-to-b from-slate-900 to-[#0a0e17]">
-        <div className="container mx-auto text-center max-w-4xl relative z-10">
-          <Badge variant="outline" className="mb-6 border-blue-500/30 text-blue-400 bg-blue-500/5 px-4 py-1 rounded-full">
+      {/* Hero Section with Banner Image */}
+      <section className="relative pt-32 pb-24 px-4 overflow-hidden">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0e17]/90 via-[#0a0e17]/80 to-[#0a0e17] z-10" />
+          <img 
+            src="/hero-bg.png" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover opacity-60"
+          />
+        </div>
+        
+        <div className="container mx-auto text-center max-w-5xl relative z-10">
+          <Badge variant="outline" className="mb-8 border-blue-500/50 text-blue-300 bg-blue-500/10 px-4 py-1 rounded-full backdrop-blur-md">
             The Marketplace for AI Wisdom
           </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-tight text-white">
+          
+          {/* Typography Adjustment: Main Title ~20% larger than Subtitle visual weight */}
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight text-white drop-shadow-2xl">
             {t('hero.title')}
           </h1>
-          <p className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-2xl md:text-3xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed font-light">
             {t('hero.subtitle')}
           </p>
           
           <div className="flex gap-4 justify-center">
             <Link href="/products/create">
-              <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-200 font-semibold rounded-full px-8">
+              <Button size="lg" className="h-12 text-lg bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20 rounded-full px-8">
                 Start Selling
               </Button>
             </Link>
             <Link href="#explore">
-              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-full px-8">
+              <Button size="lg" variant="outline" className="h-12 text-lg border-white/20 text-white hover:bg-white/10 backdrop-blur-sm rounded-full px-8">
                 Explore Skills
               </Button>
             </Link>
@@ -78,8 +88,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Product Grid (New) */}
-      <section id="explore" className="py-20 px-4">
+      {/* Product Grid */}
+      <section id="explore" className="py-20 px-4 bg-[#0a0e17]">
         <div className="container mx-auto max-w-6xl">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold">Latest Arrivals</h2>
@@ -121,7 +131,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 relative">
+      <section className="py-24 relative bg-[#0a0e17]">
         <div className="container mx-auto px-4 max-w-5xl">
           <h2 className="text-3xl font-bold text-center mb-16">{t('howItWorks.title')}</h2>
           
