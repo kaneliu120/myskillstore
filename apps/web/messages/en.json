@@ -1,0 +1,14 @@
+{
+  "HomePage": {
+    "title": "My Skill Shop",
+    "subtitle": "The marketplace for AI skills.",
+    "searchPlaceholder": "Search skills...",
+    "login": "Login",
+    "dashboard": "Dashboard"
+  },
+  "Product": {
+    "price": "Price",
+    "buy": "Buy Now",
+    "download": "Download"
+  }
+}

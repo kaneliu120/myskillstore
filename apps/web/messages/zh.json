@@ -1,0 +1,14 @@
+{
+  "HomePage": {
+    "title": "我的技能商店",
+    "subtitle": "AI 技能交易平台",
+    "searchPlaceholder": "搜索技能...",
+    "login": "登录",
+    "dashboard": "控制台"
+  },
+  "Product": {
+    "price": "价格",
+    "buy": "立即购买",
+    "download": "下载"
+  }
+}
