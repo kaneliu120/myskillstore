@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import api from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -12,6 +15,30 @@ import { Github, Mail } from 'lucide-react';
 
 export default function RegisterPage() {
   const t = useTranslations('Auth');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await api.post('/auth/register', {
+        email: data.email,
+        password: data.password,
+        nickname: data.username,
+      });
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      router.push('/user');
+    } catch (error: any) {
+      alert(error.response?.data?.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0a0e17] text-slate-50 flex items-center justify-center px-4 py-12">
@@ -49,12 +76,14 @@ export default function RegisterPage() {
           </div>
 
           {/* Register Form */}
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label htmlFor="username" className="text-slate-300">{t('register.username')}</Label>
               <Input
                 id="username"
+                name="username"
                 type="text"
+                required
                 placeholder="cooldev"
                 className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
               />
@@ -63,7 +92,9 @@ export default function RegisterPage() {
               <Label htmlFor="email" className="text-slate-300">{t('login.email')}</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
+                required
                 placeholder="you@example.com"
                 className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
               />
@@ -72,7 +103,9 @@ export default function RegisterPage() {
               <Label htmlFor="password" className="text-slate-300">{t('login.password')}</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
+                required
                 placeholder="••••••••"
                 className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
               />
@@ -81,14 +114,16 @@ export default function RegisterPage() {
               <Label htmlFor="confirmPassword" className="text-slate-300">{t('register.confirmPassword')}</Label>
               <Input
                 id="confirmPassword"
+                name="confirmPassword"
                 type="password"
+                required
                 placeholder="••••••••"
                 className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
               />
             </div>
 
             <div className="flex items-start space-x-2">
-              <Checkbox id="terms" className="border-slate-600 data-[state=checked]:bg-blue-600" />
+              <Checkbox id="terms" required className="border-slate-600 data-[state=checked]:bg-blue-600" />
               <label htmlFor="terms" className="text-sm text-slate-400 leading-tight">
                 {t('register.terms')}{' '}
                 <Link href="/terms" className="text-blue-400 hover:text-blue-300">
@@ -97,8 +132,8 @@ export default function RegisterPage() {
               </label>
             </div>
 
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white">
-              {t('register.submit')}
+            <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 text-white">
+              {loading ? 'Processing...' : t('register.submit')}
             </Button>
           </form>
 

@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import api from '@/lib/api';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -11,6 +14,29 @@ import { Github, Mail } from 'lucide-react';
 
 export default function LoginPage() {
   const t = useTranslations('Auth');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await api.post('/auth/login', {
+        email: data.email,
+        password: data.password,
+      });
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      router.push('/user');
+    } catch (error: any) {
+      alert(error.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0a0e17] text-slate-50 flex items-center justify-center px-4">
@@ -48,12 +74,14 @@ export default function LoginPage() {
           </div>
 
           {/* Email Login Form */}
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-slate-300">{t('login.email')}</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
+                required
                 placeholder="you@example.com"
                 className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
               />
@@ -67,13 +95,15 @@ export default function LoginPage() {
               </div>
               <Input
                 id="password"
+                name="password"
                 type="password"
+                required
                 placeholder="••••••••"
                 className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
               />
             </div>
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white">
-              {t('login.submit')}
+            <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 text-white">
+              {loading ? 'Logging in...' : t('login.submit')}
             </Button>
           </form>
 
