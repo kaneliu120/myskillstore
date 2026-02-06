@@ -12,10 +12,16 @@ const nextConfig: NextConfig = {
     },
   },
   async rewrites() {
+    // 运行时动态获取 API 地址，若未设置则报错（防止静默失败连接到 localhost）
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiUrl) {
+      console.warn('⚠️ WARN: NEXT_PUBLIC_API_URL is not set, API proxying will fail.');
+    }
+    
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/:path*`,
+        destination: `${apiUrl || 'http://missing-api-url'}/api/:path*`,
       },
     ];
   },

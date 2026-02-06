@@ -16,8 +16,8 @@ RUN npm install --save-dev lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x
 # 复制源码
 COPY . .
 
-# 设置构建时的环境变量（Next.js 需要在构建时知道 API 地址）
-ARG NEXT_PUBLIC_API_URL
+# 设置构建时的环境变量（提供一个占位符，防止构建失败，真正的值在运行时由 Render 注入）
+ARG NEXT_PUBLIC_API_URL=https://api-placeholder-build-time
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # 打印构建时的 API URL 以便调试
