@@ -383,31 +383,28 @@ export default function HomePage() {
           <div className="w-16 h-1 bg-purple-600 mx-auto mb-20"></div>
           
           {/* Steps Row */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4">
             {steps.map((step, idx) => (
               <div key={idx} className="flex items-center">
                 {/* Step Card */}
-                <div className="flex flex-col items-center text-center w-[200px]">
-                  {/* Icon Circle */}
-                  <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl shadow-purple-200 mb-6">
-                    <step.icon className="w-10 h-10 text-white" strokeWidth={1.5} />
+                <div className="flex flex-col items-center text-center w-[220px]">
+                  {/* Icon Circle - 放大80% */}
+                  <div className="w-[140px] h-[140px] bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl shadow-purple-200 mb-8">
+                    <step.icon className="w-16 h-16 text-white" strokeWidth={1.5} />
                   </div>
                   
-                  {/* Number */}
-                  <div className="text-purple-600 font-bold text-2xl mb-3">{step.num}</div>
-                  
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">{step.title}</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
                   
-                  {/* Description */}
-                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+                  {/* Description - 两行显示 */}
+                  <p className="text-sm text-gray-500 leading-6 line-clamp-2 h-12">{step.desc}</p>
                 </div>
                 
                 {/* Arrow Connector */}
                 {idx < 3 && (
-                  <div className="hidden md:flex items-center justify-center w-16 -mt-32">
-                    <svg width="40" height="20" viewBox="0 0 40 20" fill="none" className="text-purple-300">
-                      <path d="M0 10H35M35 10L28 3M35 10L28 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <div className="hidden md:flex items-center justify-center w-12 -mt-24">
+                    <svg width="32" height="16" viewBox="0 0 32 16" fill="none" className="text-purple-300">
+                      <path d="M0 8H28M28 8L22 2M28 8L22 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                 )}
