@@ -4,7 +4,7 @@ services:
     name: myskillshop-api
     env: node
     plan: free
-    dockerFilePath: ./deploy/api.Dockerfile
+    dockerFilePath: api.Dockerfile
     dockerContext: .
     envVars:
       - key: PORT
@@ -37,7 +37,7 @@ services:
     name: myskillshop-web
     env: node
     plan: free
-    dockerFilePath: ./deploy/web.Dockerfile
+    dockerFilePath: web.Dockerfile
     dockerContext: .
     envVars:
       - key: NEXT_PUBLIC_API_URL
@@ -45,9 +45,6 @@ services:
           type: web
           name: myskillshop-api
           property: url
-          # Render 的内部 URL 格式通常是 http://<service-name>:<port>
-          # 但前端是浏览器跑的，必须用公网 URL
-          # Render 会自动注入该服务的公网 URL 变量
 
 databases:
   - name: myskillshop-db
