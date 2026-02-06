@@ -12,10 +12,18 @@ const nextConfig: NextConfig = {
     },
   },
   async rewrites() {
-    // 运行时动态获取 API 地址，若未设置则报错（防止静默失败连接到 localhost）
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    // 运行时动态获取 API 地址
+    // ⚠️ 关键点：使用 process.env.SERVER_API_URL 或回退到 process.env.NEXT_PUBLIC_API_URL
+    // 但必须确保构建时不会被静态替换为占位符。
+    // 在 Render 上，NEXT_PUBLIC_ 变量会被 build time inline，所以我们优先读取非 PUBLIC 的变量，
+    // 或者直接读取 NEXT_PUBLIC_API_URL 但寄希望于它没被 inline（这很难）。
+    // 最稳妥的办法：使用一个专门用于服务器端的变量 SERVER_API_URL。
+    const apiUrl = process.env.SERVER_API_URL || process.env.NEXT_PUBLIC_API_URL;
+    
+    console.log(`[Next.js Rewrite] Configuring proxy to: ${apiUrl}`);
+
     if (!apiUrl) {
-      console.warn('⚠️ WARN: NEXT_PUBLIC_API_URL is not set, API proxying will fail.');
+      console.warn('⚠️ WARN: API_URL is not set, API proxying will fail.');
     }
     
     return [

@@ -27,6 +27,8 @@ services:
     envVars:
       - key: PORT
         value: 10000
+      - key: SERVER_API_URL
+        value: https://my-skill-api-kane.onrender.com
       - key: NEXT_PUBLIC_API_URL
         value: https://my-skill-api-kane.onrender.com
 
