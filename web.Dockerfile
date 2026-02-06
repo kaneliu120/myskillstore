@@ -10,6 +10,9 @@ COPY package*.json ./
 COPY apps/api/package*.json ./apps/api/
 COPY apps/web/package*.json ./apps/web/
 
+# 显式安装适用于 Alpine 的 lightningcss 补丁，解决 Turbopack 构建 CSS 失败的问题
+RUN npm install --save-dev lightningcss-linux-x64-musl --workspace=apps/web
+
 # 安装依赖
 RUN npm ci
 
