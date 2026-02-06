@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api` : '/api',
+  baseURL: 'https://my-skill-shop.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
