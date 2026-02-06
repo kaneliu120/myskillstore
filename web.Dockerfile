@@ -2,6 +2,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# 安装构建原生模块所需的系统依赖
+RUN apk add --no-cache libc6-compat
+
 # 复制依赖定义
 COPY package*.json ./
 COPY apps/api/package*.json ./apps/api/
