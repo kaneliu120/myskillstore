@@ -43,8 +43,7 @@ services:
       - key: PORT
         value: 10000
       - key: NEXT_PUBLIC_API_URL
-        # 显式指向 API 的公网地址
-        value: https://my-skill-shop.onrender.com
+        value: https://myskillshop-api.onrender.com
 
 databases:
   - name: myskillshop-db
