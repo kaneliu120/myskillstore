@@ -23,6 +23,10 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
+  findByEmail(email: string) {
+    return this.usersRepository.findOneBy({ email });
+  }
+
   findOneByEmail(email: string) {
     return this.usersRepository.findOneBy({ email });
   }

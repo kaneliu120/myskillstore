@@ -1,18 +1,30 @@
-import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, Req, Query } from '@nestjs/common';
+import { Request } from 'express';
 import { ProductsService } from './products.service';
-import { Product } from './entities/product.entity';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ProductStatus } from './entities/product.entity';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() data: Partial<Product>) {
-    return this.productsService.create(data);
+  create(@Req() req: Request & { user: any }, @Body() createProductDto: CreateProductDto) {
+    return this.productsService.create({
+      ...createProductDto,
+      seller_id: req.user.sub,
+      status: ProductStatus.PENDING_REVIEW,
+    });
   }
 
   @Get()
-  findAll() {
+  findAll(@Query('status') status?: string) {
+    if (status === 'approved') {
+      return this.productsService.findApproved();
+    }
     return this.productsService.findAll();
   }
 
@@ -21,8 +33,21 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('my/list')
+  findMyProducts(@Req() req: Request & { user: any }) {
+    return this.productsService.findBySeller(req.user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Partial<Product>) {
-    return this.productsService.update(+id, data);
+  update(@Req() req: Request & { user: any }, @Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    return this.productsService.updateBySeller(+id, req.user.sub, updateProductDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  remove(@Req() req: Request & { user: any }, @Param('id') id: string) {
+    return this.productsService.removeBySeller(+id, req.user.sub);
   }
 }
