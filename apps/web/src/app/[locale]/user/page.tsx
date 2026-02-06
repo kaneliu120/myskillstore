@@ -25,9 +25,9 @@ const USER = {
 
 // Mock orders (as buyer)
 const MY_ORDERS = [
-  { id: 'ORD001', product: 'SEO Blog Writer Pro', seller: 'ContentKing', price: 49, status: 'completed', date: '2026-02-05' },
-  { id: 'ORD002', product: 'Midjourney Prompt Pack', seller: 'ArtAI', price: 15, status: 'pending', date: '2026-02-04' },
-  { id: 'ORD003', product: 'React Component Library', seller: 'DevMaster', price: 79, status: 'cancelled', date: '2026-02-01' },
+  { id: 1, product: 'SEO Blog Writer Pro', seller: 'ContentKing', price: 49, status: 'completed', date: '2026-02-05' },
+  { id: 2, product: 'Midjourney Prompt Pack', seller: 'ArtAI', price: 15, status: 'pending', date: '2026-02-04' },
+  { id: 3, product: 'React Component Library', seller: 'DevMaster', price: 79, status: 'cancelled', date: '2026-02-01' },
 ];
 
 // Mock products (as seller)
@@ -238,12 +238,10 @@ export default function UserDashboard() {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-white">${order.price}</p>
-                        <Link href={`/orders/${order.id}`}>
-                          <Button variant="ghost" size="sm" className="text-blue-400 hover:text-blue-300 mt-1 gap-1">
-                            {t('orders.view')}
-                            <ArrowUpRight className="w-3 h-3" />
-                          </Button>
-                        </Link>
+                        <Button variant="ghost" size="sm" className="text-slate-500 mt-1 gap-1" disabled>
+                          {t('orders.view')}
+                          <ArrowUpRight className="w-3 h-3" />
+                        </Button>
                       </div>
                     </div>
                   ))}
