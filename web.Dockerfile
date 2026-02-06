@@ -1,4 +1,4 @@
-# 阶段 1：构建环境 - 使用 Debian 镜像以获得更好的原生模块兼容性
+# 阶段 1：构建环境 - 使用 Debian 镜像
 FROM node:20-slim AS builder
 WORKDIR /app
 
@@ -6,6 +6,9 @@ WORKDIR /app
 COPY package*.json ./
 COPY apps/api/package*.json ./apps/api/
 COPY apps/web/package*.json ./apps/web/
+
+# 显式安装适用于 Debian (GNU) 的 lightningcss 绑定包
+RUN npm install --save-dev lightningcss-linux-x64-gnu --workspace=apps/web
 
 # 安装依赖
 RUN npm ci
