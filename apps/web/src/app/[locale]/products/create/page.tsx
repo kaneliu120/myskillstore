@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -11,29 +11,30 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { 
-  ArrowLeft, Upload, FileText, Link as LinkIcon, 
-  Wallet, QrCode, Image, DollarSign, Tag,
-  CheckCircle, Info
+  ArrowLeft, Upload, FileText, Link as LinkIcon, Boxes,
+  Wallet, DollarSign, Tag, CheckCircle, Info
 } from 'lucide-react';
 import api from '@/lib/api';
 
 const CATEGORIES = [
-  { id: 'prompts', label: 'Prompts', icon: '💬' },
-  { id: 'agents', label: 'AI Agents', icon: '🤖' },
-  { id: 'workflows', label: 'Workflows', icon: '⚡' },
-  { id: 'code', label: 'Code & Scripts', icon: '💻' },
-  { id: 'design', label: 'Design Assets', icon: '🎨' },
-  { id: 'data', label: 'Datasets', icon: '📊' },
-  { id: 'other', label: 'Other', icon: '📦' },
+  { id: 'prompts', label: 'Prompts', labelZh: '提示词', icon: '💬' },
+  { id: 'agents', label: 'AI Agents', labelZh: 'AI代理', icon: '🤖' },
+  { id: 'workflows', label: 'Workflows', labelZh: '工作流', icon: '⚡' },
+  { id: 'code', label: 'Code & Scripts', labelZh: '代码脚本', icon: '💻' },
+  { id: 'design', label: 'Design Assets', labelZh: '设计资源', icon: '🎨' },
+  { id: 'data', label: 'Datasets', labelZh: '数据集', icon: '📊' },
+  { id: 'other', label: 'Other', labelZh: '其他', icon: '📦' },
 ];
 
 const DELIVERY_TYPES = [
-  { id: 'auto', label: 'Auto Delivery', desc: 'System delivers file after payment confirmation', icon: FileText },
-  { id: 'manual', label: 'Manual Delivery', desc: 'You deliver via chat/Telegram after confirmation', icon: LinkIcon },
+  { id: 'auto', label: 'Auto Delivery', labelZh: '自动交付', desc: 'System delivers file after payment', descZh: '支付确认后系统自动交付文件', icon: FileText },
+  { id: 'manual', label: 'Manual Delivery', labelZh: '手动交付', desc: 'You deliver via chat/Telegram', descZh: '您通过聊天/Telegram手动交付', icon: LinkIcon },
 ];
 
 export default function CreateProductPage() {
   const t = useTranslations('CreateProduct');
+  const locale = useLocale();
+  const isZh = locale === 'zh';
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -61,9 +62,8 @@ export default function CreateProductPage() {
         tags: formData.tags,
         price_usd: parseFloat(formData.price),
         delivery_type: formData.deliveryType === 'auto' ? 'auto_hosted' : 'manual',
-        // wallet information could be stored in user profile or product meta
       });
-      router.push('/user'); // Redirect to dashboard
+      router.push('/user');
     } catch (error: any) {
       alert(error.response?.data?.message || 'Failed to create product');
     } finally {
@@ -72,97 +72,97 @@ export default function CreateProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0e17] text-slate-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
-      <nav className="border-b border-white/10 bg-[#0a0e17]/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/user" className="text-slate-400 hover:text-white transition">
+            <Link href="/user" className="text-gray-500 hover:text-gray-900 transition">
               <ArrowLeft className="w-5 h-5" />
             </Link>
-            <h1 className="text-lg font-semibold">{t('title')}</h1>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                <Boxes className="w-5 h-5 text-white" />
+              </div>
+              <h1 className="text-lg font-semibold text-gray-900">{t('title')}</h1>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <Badge variant="outline" className="border-slate-700 text-slate-400">
-              {t('step')} {step}/3
-            </Badge>
-          </div>
+          <Badge variant="outline" className="border-purple-200 text-purple-600 bg-purple-50">
+            {t('step')} {step}/3
+          </Badge>
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
+      <div className="container mx-auto px-6 py-8 max-w-3xl">
         {/* Step 1: Basic Info */}
         {step === 1 && (
-          <Card className="bg-slate-900/50 border-slate-800">
+          <Card className="bg-white border-gray-200">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Tag className="w-5 h-5 text-blue-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <Tag className="w-5 h-5 text-purple-600" />
                 {t('step1.title')}
               </CardTitle>
-              <CardDescription className="text-slate-400">{t('step1.description')}</CardDescription>
+              <CardDescription className="text-gray-500">{t('step1.description')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Product Title */}
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-slate-300">{t('step1.productTitle')}</Label>
+                <Label htmlFor="title" className="text-gray-700">{t('step1.productTitle')}</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => updateField('title', e.target.value)}
-                  placeholder="e.g., Advanced SEO Blog Writer Agent"
-                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
+                  placeholder={isZh ? "例如：高级SEO写作AI代理" : "e.g., Advanced SEO Blog Writer Agent"}
+                  className="border-gray-200 focus-visible:ring-purple-500"
                 />
               </div>
 
-              {/* Category */}
               <div className="space-y-3">
-                <Label className="text-slate-300">{t('step1.category')}</Label>
+                <Label className="text-gray-700">{t('step1.category')}</Label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {CATEGORIES.map(cat => (
                     <button
                       key={cat.id}
                       onClick={() => updateField('category', cat.id)}
-                      className={`p-3 rounded-lg border text-left transition-all ${
+                      className={`p-3 rounded-xl border text-left transition-all ${
                         formData.category === cat.id
-                          ? 'border-blue-500 bg-blue-500/10 text-white'
-                          : 'border-slate-700 bg-slate-800/30 text-slate-400 hover:border-slate-600'
+                          ? 'border-purple-500 bg-purple-50 text-purple-700'
+                          : 'border-gray-200 bg-white text-gray-600 hover:border-purple-200'
                       }`}
                     >
                       <span className="text-lg">{cat.icon}</span>
-                      <p className="text-sm mt-1">{cat.label}</p>
+                      <p className="text-sm mt-1">{isZh ? cat.labelZh : cat.label}</p>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Description */}
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-slate-300">{t('step1.description_label')}</Label>
+                <Label htmlFor="description" className="text-gray-700">{t('step1.description_label')}</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => updateField('description', e.target.value)}
-                  placeholder="Describe what your skill does..."
+                  placeholder={isZh ? "描述您的技能功能..." : "Describe what your skill does..."}
                   rows={4}
-                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500 resize-none"
+                  className="border-gray-200 focus-visible:ring-purple-500 resize-none"
                 />
               </div>
 
-              {/* Tags */}
               <div className="space-y-2">
-                <Label htmlFor="tags" className="text-slate-300">{t('step1.tags')}</Label>
+                <Label htmlFor="tags" className="text-gray-700">{t('step1.tags')}</Label>
                 <Input
                   id="tags"
                   value={formData.tags}
                   onChange={(e) => updateField('tags', e.target.value)}
                   placeholder="SEO, content, marketing"
-                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
+                  className="border-gray-200 focus-visible:ring-purple-500"
                 />
+                <p className="text-xs text-gray-400">{t('step1.tags_hint')}</p>
               </div>
 
               <Button 
                 onClick={() => setStep(2)} 
-                className="w-full bg-blue-600 hover:bg-blue-500"
+                className="w-full bg-purple-600 hover:bg-purple-700 rounded-lg h-11"
                 disabled={!formData.title || !formData.category}
               >
                 {t('next')}
@@ -173,69 +173,67 @@ export default function CreateProductPage() {
 
         {/* Step 2: Pricing & Delivery */}
         {step === 2 && (
-          <Card className="bg-slate-900/50 border-slate-800">
+          <Card className="bg-white border-gray-200">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-emerald-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-emerald-600" />
                 {t('step2.title')}
               </CardTitle>
-              <CardDescription className="text-slate-400">{t('step2.description')}</CardDescription>
+              <CardDescription className="text-gray-500">{t('step2.description')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Price */}
               <div className="space-y-2">
-                <Label htmlFor="price" className="text-slate-300">{t('step2.price')}</Label>
+                <Label htmlFor="price" className="text-gray-700">{t('step2.price')}</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
                   <Input
                     id="price"
                     type="number"
                     value={formData.price}
                     onChange={(e) => updateField('price', e.target.value)}
                     placeholder="49"
-                    className="pl-8 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500"
+                    className="pl-8 border-gray-200 focus-visible:ring-purple-500"
                   />
                 </div>
+                <p className="text-xs text-gray-400">{t('step2.price_hint')}</p>
               </div>
 
-              {/* Delivery Type */}
               <div className="space-y-3">
-                <Label className="text-slate-300">{t('step2.delivery')}</Label>
+                <Label className="text-gray-700">{t('step2.delivery')}</Label>
                 <div className="grid gap-3">
                   {DELIVERY_TYPES.map(type => (
                     <button
                       key={type.id}
                       onClick={() => updateField('deliveryType', type.id)}
-                      className={`p-4 rounded-lg border text-left transition-all flex items-start gap-4 ${
+                      className={`p-4 rounded-xl border text-left transition-all flex items-start gap-4 ${
                         formData.deliveryType === type.id
-                          ? 'border-blue-500 bg-blue-500/10'
-                          : 'border-slate-700 bg-slate-800/30 hover:border-slate-600'
+                          ? 'border-purple-500 bg-purple-50'
+                          : 'border-gray-200 bg-white hover:border-purple-200'
                       }`}
                     >
-                      <div className={`p-2 rounded-lg ${formData.deliveryType === type.id ? 'bg-blue-500/20' : 'bg-slate-700/50'}`}>
-                        <type.icon className={`w-5 h-5 ${formData.deliveryType === type.id ? 'text-blue-400' : 'text-slate-400'}`} />
+                      <div className={`p-2 rounded-lg ${formData.deliveryType === type.id ? 'bg-purple-100' : 'bg-gray-100'}`}>
+                        <type.icon className={`w-5 h-5 ${formData.deliveryType === type.id ? 'text-purple-600' : 'text-gray-500'}`} />
                       </div>
                       <div>
-                        <p className={`font-medium ${formData.deliveryType === type.id ? 'text-white' : 'text-slate-300'}`}>
-                          {type.label}
+                        <p className={`font-medium ${formData.deliveryType === type.id ? 'text-purple-700' : 'text-gray-700'}`}>
+                          {isZh ? type.labelZh : type.label}
                         </p>
-                        <p className="text-sm text-slate-500 mt-1">{type.desc}</p>
+                        <p className="text-sm text-gray-500 mt-1">{isZh ? type.descZh : type.desc}</p>
                       </div>
                       {formData.deliveryType === type.id && (
-                        <CheckCircle className="w-5 h-5 text-blue-400 ml-auto" />
+                        <CheckCircle className="w-5 h-5 text-purple-600 ml-auto" />
                       )}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* File Upload Placeholder */}
               {formData.deliveryType === 'auto' && (
                 <div className="space-y-2">
-                  <Label className="text-slate-300">{t('step2.upload')}</Label>
-                  <div className="border-2 border-dashed border-slate-700 rounded-lg p-8 text-center hover:border-slate-600 transition cursor-pointer">
-                    <Upload className="w-10 h-10 text-slate-500 mx-auto mb-3" />
-                    <p className="text-slate-400">{t('step2.upload_hint')}</p>
+                  <Label className="text-gray-700">{t('step2.upload')}</Label>
+                  <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-purple-300 transition cursor-pointer bg-gray-50">
+                    <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-500">{t('step2.upload_hint')}</p>
                   </div>
                 </div>
               )}
@@ -244,13 +242,13 @@ export default function CreateProductPage() {
                 <Button 
                   variant="outline" 
                   onClick={() => setStep(1)}
-                  className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg h-11"
                 >
                   {t('back')}
                 </Button>
                 <Button 
                   onClick={() => setStep(3)} 
-                  className="flex-1 bg-blue-600 hover:bg-blue-500"
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 rounded-lg h-11"
                   disabled={!formData.price}
                 >
                   {t('next')}
@@ -262,45 +260,46 @@ export default function CreateProductPage() {
 
         {/* Step 3: Payment Setup */}
         {step === 3 && (
-          <Card className="bg-slate-900/50 border-slate-800">
+          <Card className="bg-white border-gray-200">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Wallet className="w-5 h-5 text-purple-400" />
+              <CardTitle className="text-gray-900 flex items-center gap-2">
+                <Wallet className="w-5 h-5 text-purple-600" />
                 {t('step3.title')}
               </CardTitle>
-              <CardDescription className="text-slate-400">{t('step3.description')}</CardDescription>
+              <CardDescription className="text-gray-500">{t('step3.description')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex gap-3 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-300">{t('step3.info')}</p>
+              <div className="flex gap-3 p-4 bg-purple-50 border border-purple-100 rounded-xl">
+                <Info className="w-5 h-5 text-purple-600 shrink-0 mt-0.5" />
+                <p className="text-sm text-purple-700">{t('step3.info')}</p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="wallet" className="text-slate-300">{t('step3.wallet')}</Label>
+                <Label htmlFor="wallet" className="text-gray-700">{t('step3.wallet')}</Label>
                 <Input
                   id="wallet"
                   value={formData.wallet}
                   onChange={(e) => updateField('wallet', e.target.value)}
                   placeholder="0x1234...5678 or TRC20/BEP20 address"
-                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-blue-500 font-mono"
+                  className="border-gray-200 focus-visible:ring-purple-500 font-mono"
                 />
+                <p className="text-xs text-gray-400">{t('step3.wallet_hint')}</p>
               </div>
 
               <div className="flex gap-3">
                 <Button 
                   variant="outline" 
                   onClick={() => setStep(2)}
-                  className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg h-11"
                 >
                   {t('back')}
                 </Button>
                 <Button 
                   onClick={handleSubmit} 
                   disabled={loading || !formData.wallet}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-500"
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 rounded-lg h-11"
                 >
-                  {loading ? 'Submitting...' : t('submit')}
+                  {loading ? (isZh ? '提交中...' : 'Submitting...') : t('submit')}
                 </Button>
               </div>
             </CardContent>
@@ -313,7 +312,7 @@ export default function CreateProductPage() {
             <div
               key={s}
               className={`h-2 rounded-full transition-all ${
-                s === step ? 'w-8 bg-blue-500' : s < step ? 'w-2 bg-blue-500/50' : 'w-2 bg-slate-700'
+                s === step ? 'w-8 bg-purple-600' : s < step ? 'w-2 bg-purple-300' : 'w-2 bg-gray-200'
               }`}
             />
           ))}
