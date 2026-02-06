@@ -1,4 +1,45 @@
 {
+  "ServicePage": {
+    "nav": {
+      "brand": "OpenClaw"
+    },
+    "hero": {
+      "badge": "专业上门服务 · 马尼拉",
+      "title": "为您搭建私人 AI 助理",
+      "subtitle": "一个部署在本地的超级助理，能深度理解你的文件和意图，远超网页版 AI 的体验。"
+    },
+    "requirements": {
+      "title": "设备要求",
+      "item1": "一台闲置的 Windows 或 Mac 电脑",
+      "item1_desc": "仅此而已，其他的我来搞定。"
+    },
+    "services": {
+      "title": "服务内容",
+      "subtitle": "₱5,000 一次性服务费包含",
+      "service1_title": "端到端安装",
+      "service1_desc": "搞定后端环境、数据库及前端部署。无需您具备任何技术知识。",
+      "service2_title": "API 聚合接入",
+      "service2_desc": "手把手帮您开通并配置 OpenAI 或 Google 的 API Key，给 AI 装上最强大脑。",
+      "service3_title": "场景化配置",
+      "service3_desc": "根据您的具体需求（商业分析、创意写作、代码辅助）进行系统微调。"
+    },
+    "pricing": {
+      "label": "服务费",
+      "unit": "一次性",
+      "description": "见效付款：确认系统运行流畅后再支付。后续 API 流量费（Token）由您直接按需支付给模型提供商。",
+      "guarantee": "满意再付款 · 现场演示确认"
+    },
+    "about": {
+      "title": "关于我",
+      "description": "我是一名在马尼拉工作 16 年的互联网产品经理。最近我利用 OpenClaw 实现了全自动化工作流，甚至在不写一行代码的情况下完成了网站平台的开发。"
+    },
+    "contact": {
+      "title": "准备好升级你的生产力了吗？"
+    },
+    "footer": {
+      "text": "摆脱简单的聊天机器人，真正拥有一套能理解你工作、你文件、你目标的生产力 AI 系统。"
+    }
+  },
   "HomePage": {
     "hero": {
       "title": "将你深积多年的行业见解重构为数字化技能，让专业智慧成为 AI 时代自由交易的核心版权。",
@@ -17,15 +58,111 @@
       "step3_title": "确权上架与智慧流转",
       "step3_desc": "提交审核后，您的专业技能将进入 My Skill Shop 技能库。买家通过您的收款信息完成线下支付并提交凭证，您在后台确认收款后，系统将自动（或人工）完成交付。数字版权在这一刻实现价值交换。",
       "step4_title": "建立品牌与长期收益",
-      "step4_desc": "随着技能被更多用户购买与好评，您将建立起独特的个人专业品牌。在这个 AI 驱动的新时代，让您的知识产权成为一台持续运转的“价值引擎”，为您带来长期且稳定的被动收入。",
+      "step4_desc": "随着技能被更多用户购买与好评，您将建立起独特的个人专业品牌。在这个 AI 驱动的新时代，让您的知识产权成为一台持续运转的价值引擎，为您带来长期且稳定的被动收入。",
       "cta": "立即封装我的智慧资产"
     },
     "footer": {
       "text": "AI 时代不应有门槛，My Skill Shop 赋予每个人创建、提交并出售专属行业技能的权利。我们致力于通过数字版权技术，助您将碎片化的智慧重构为系统化的数字产权，在引领智能变革的同时，为您带来长效且丰厚的经济回报。"
     },
     "nav": {
+      "brand": "我的技能商店",
       "login": "登录",
       "dashboard": "控制台"
+    }
+  },
+  "Auth": {
+    "login": {
+      "title": "欢迎回来",
+      "subtitle": "登录您的账户继续",
+      "email": "邮箱",
+      "password": "密码",
+      "forgot": "忘记密码？",
+      "submit": "登录",
+      "noAccount": "还没有账户？",
+      "signUp": "立即注册",
+      "or": "或者使用"
+    },
+    "register": {
+      "title": "创建账户",
+      "subtitle": "今天就开始销售您的 AI 技能",
+      "username": "用户名",
+      "confirmPassword": "确认密码",
+      "terms": "我同意",
+      "termsLink": "服务条款",
+      "submit": "创建账户",
+      "hasAccount": "已有账户？",
+      "signIn": "立即登录"
+    }
+  },
+  "Dashboard": {
+    "nav": {
+      "newProduct": "发布产品"
+    },
+    "stats": {
+      "balance": "余额",
+      "totalSales": "总销量",
+      "purchases": "购买数"
+    },
+    "tabs": {
+      "myProducts": "我的产品",
+      "myOrders": "我的订单",
+      "mySales": "销售记录"
+    },
+    "products": {
+      "title": "我的产品",
+      "description": "管理您上架的技能和产品",
+      "add": "添加产品",
+      "sales": "销量",
+      "created": "创建时间",
+      "edit": "编辑"
+    },
+    "orders": {
+      "title": "我的订单",
+      "description": "您的购买记录",
+      "seller": "卖家",
+      "view": "查看"
+    },
+    "sales": {
+      "title": "销售记录",
+      "description": "您的产品销售收入",
+      "buyer": "买家"
+    }
+  },
+  "CreateProduct": {
+    "title": "发布新产品",
+    "step": "步骤",
+    "next": "继续",
+    "back": "返回",
+    "submit": "提交审核",
+    "step1": {
+      "title": "基本信息",
+      "description": "介绍您的技能或产品",
+      "productTitle": "产品标题",
+      "category": "分类",
+      "description_label": "描述",
+      "tags": "标签",
+      "tags_hint": "用逗号分隔多个标签"
+    },
+    "step2": {
+      "title": "定价与交付",
+      "description": "设置价格和交付方式",
+      "price": "价格（美元）",
+      "price_hint": "您获得 100% - 买家直接付款给您",
+      "delivery": "交付方式",
+      "upload": "上传技能文件",
+      "upload_hint": "拖放或点击上传",
+      "preview": "预览图片",
+      "preview_hint": "上传产品预览图"
+    },
+    "step3": {
+      "title": "收款设置",
+      "description": "配置您的收款方式",
+      "info": "买家将使用加密货币直接向您付款。我们不托管您的资金 - 付款直接进入您的钱包。",
+      "wallet": "钱包地址",
+      "wallet_hint": "输入您的 USDT/USDC 钱包地址（TRC20、BEP20 或 ERC20）",
+      "qr": "收款二维码（可选）",
+      "qr_hint": "上传您的钱包二维码方便买家付款",
+      "coins": "接受的加密货币"
     }
   }
 }

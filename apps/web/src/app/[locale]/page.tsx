@@ -24,7 +24,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/" className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 text-transparent bg-clip-text">
-              My Skill Shop
+              {t('nav.brand')}
             </Link>
             <div className="hidden md:flex items-center relative w-96">
               <Search className="absolute left-3 w-4 h-4 text-slate-500" />
