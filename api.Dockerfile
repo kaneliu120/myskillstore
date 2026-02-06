@@ -1,5 +1,6 @@
 # 阶段 1：构建环境
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
+
 WORKDIR /app
 
 # 复制依赖定义文件
