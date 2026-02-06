@@ -21,11 +21,15 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Query('status') status?: string) {
+  findAll(
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+    @Query('category') category?: string,
+  ) {
     if (status === 'approved') {
-      return this.productsService.findApproved();
+      return this.productsService.findApproved({ search, category });
     }
-    return this.productsService.findAll();
+    return this.productsService.findAll({ search, category });
   }
 
   @Get(':id')

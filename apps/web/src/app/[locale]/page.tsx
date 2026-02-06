@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -6,16 +8,42 @@ import { Badge } from '@/components/ui/badge';
 import { Zap, Gem, Wallet, Brain, Globe, TrendingUp, Search } from 'lucide-react';
 import ProductCard from '@/components/product/ProductCard';
 import { Input } from '@/components/ui/input';
+import { useState, useEffect } from 'react';
+import api from '@/lib/api';
 
-const LATEST_PRODUCTS = [
-  { id: '1', title: 'Advanced Trading Agent', price: 150, author: 'CryptoWizard', category: 'Finance' },
-  { id: '2', title: 'SEO Blog Writer Pro', price: 49, author: 'ContentKing', category: 'Marketing' },
-  { id: '3', title: 'Next.js SaaS Boilerplate', price: 99, author: 'DevMaster', category: 'Code' },
-  { id: '4', title: 'Midjourney Prompt Pack', price: 15, author: 'ArtAI', category: 'Design' },
-];
+interface Product {
+  id: number;
+  title: string;
+  price_usd: number;
+  seller: { nickname: string };
+  category: string;
+}
 
 export default function HomePage() {
   const t = useTranslations('HomePage');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [search, setSearch] = useState('');
+
+  const fetchProducts = async (searchQuery = '') => {
+    try {
+      const response = await api.get('/products', {
+        params: { status: 'approved', search: searchQuery }
+      });
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Failed to fetch products', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      fetchProducts(search);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0a0e17] text-slate-50 font-sans selection:bg-blue-500/30">
@@ -31,6 +59,9 @@ export default function HomePage() {
               <Input 
                 placeholder="Search for prompts, agents, code..." 
                 className="pl-10 bg-white/5 border-white/10 focus-visible:ring-blue-500 rounded-full h-9 text-sm"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleSearch}
               />
             </div>
           </div>
@@ -97,9 +128,20 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {LATEST_PRODUCTS.map(product => (
-              <ProductCard key={product.id} {...product} />
-            ))}
+            {products.length > 0 ? (
+              products.map(product => (
+                <ProductCard 
+                  key={product.id} 
+                  id={product.id.toString()}
+                  title={product.title}
+                  price={Number(product.price_usd)}
+                  author={product.seller?.nickname || 'Unknown'}
+                  category={product.category || 'Other'}
+                />
+              ))
+            ) : (
+              <p className="text-slate-500 col-span-full text-center py-10">No products found. Be the first to list one!</p>
+            )}
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Product, ProductStatus } from './entities/product.entity';
 
 @Injectable()
@@ -15,16 +15,31 @@ export class ProductsService {
     return this.productsRepository.save(product);
   }
 
-  findAll() {
+  findAll(query: { search?: string; category?: string } = {}) {
+    const where: any = {};
+    if (query.search) {
+      where.title = Like(`%${query.search}%`);
+    }
+    // 注意：目前 Entity 里还没定义 category 字段，稍后需要加上
+    // if (query.category) {
+    //   where.category = query.category;
+    // }
+
     return this.productsRepository.find({ 
+      where,
       relations: ['seller'],
       order: { createdAt: 'DESC' },
     });
   }
 
-  findApproved() {
+  findApproved(query: { search?: string; category?: string } = {}) {
+    const where: any = { status: ProductStatus.APPROVED };
+    if (query.search) {
+      where.title = Like(`%${query.search}%`);
+    }
+
     return this.productsRepository.find({
-      where: { status: ProductStatus.APPROVED },
+      where,
       relations: ['seller'],
       order: { createdAt: 'DESC' },
     });

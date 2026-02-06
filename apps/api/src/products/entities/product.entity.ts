@@ -32,6 +32,15 @@ export class Product {
   @Column({ type: 'text', nullable: true })
   description: string;
 
+  @Column({ nullable: true })
+  category: string;
+
+  @Column({ nullable: true })
+  tags: string;
+
+  @Column({ nullable: true })
+  preview_image_url: string;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price_usd: number;
 
