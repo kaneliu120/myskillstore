@@ -9,26 +9,10 @@ services:
     envVars:
       - key: PORT
         value: 10000
-      - key: DB_HOST
+      - key: DATABASE_URL
         fromDatabase:
           name: myskillshop-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: myskillshop-db
-          property: port
-      - key: DB_DATABASE
-        fromDatabase:
-          name: myskillshop-db
-          property: database
-      - key: DB_USERNAME
-        fromDatabase:
-          name: myskillshop-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: myskillshop-db
-          property: password
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
 

@@ -7,6 +7,11 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return this.appService.getHello();
+    return 'Skill Shop API is Running!';
+  }
+
+  @Get('health')
+  getHealth(): string {
+    return 'OK';
   }
 }
