@@ -7,7 +7,8 @@ async function bootstrap() {
   
   // Enable CORS for frontend
   app.enableCors({
-    origin: true, // 生产环境允许所有来源，或者您可以填入具体前端域名
+    origin: '*', // 强制允许所有来源，这是解决跨域问题的终极招式
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 

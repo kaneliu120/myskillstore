@@ -14,7 +14,7 @@ RUN npm ci
 COPY . .
 
 # 构建后端 API
-RUN npm run build --workspace=apps/api
+RUN date > /app/api_build_date.txt && npm run build --workspace=apps/api
 
 # 阶段 2：生产运行环境
 FROM node:20-slim AS runner
