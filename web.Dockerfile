@@ -1,17 +1,11 @@
-# 阶段 1：构建环境
-FROM node:20-alpine AS builder
+# 阶段 1：构建环境 - 使用 Debian 镜像以获得更好的原生模块兼容性
+FROM node:20-slim AS builder
 WORKDIR /app
-
-# 安装构建原生模块所需的系统依赖
-RUN apk add --no-cache libc6-compat
 
 # 复制依赖定义
 COPY package*.json ./
 COPY apps/api/package*.json ./apps/api/
 COPY apps/web/package*.json ./apps/web/
-
-# 显式安装适用于 Alpine 的 lightningcss 补丁，解决 Turbopack 构建 CSS 失败的问题
-RUN npm install --save-dev lightningcss-linux-x64-musl --workspace=apps/web
 
 # 安装依赖
 RUN npm ci
@@ -19,8 +13,7 @@ RUN npm ci
 # 复制源码
 COPY . .
 
-# 设置构建时的环境变量（注意：NEXT_PUBLIC_ 开头的变量通常需要在构建时注入）
-# 在 Render/Railway 中，可以在构建命令前加参数，或者这里给个默认值
+# 设置构建时的环境变量
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
@@ -28,7 +21,7 @@ ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN npm run build --workspace=apps/web
 
 # 阶段 2：生产运行环境
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
