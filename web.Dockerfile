@@ -28,15 +28,16 @@ FROM node:20-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3000
+# 统一使用 Render 默认端口
+ENV PORT=10000
+ENV HOSTNAME="0.0.0.0"
 
 # 复制 Next.js standalone 构建产物
-# Next.js 自动将所需依赖打包到了 .next/standalone 下
 COPY --from=builder /app/apps/web/.next/standalone ./
 COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder /app/apps/web/public ./apps/web/public
 
-EXPOSE 3000
+EXPOSE 10000
 
-# 启动命令 (standalone 模式下，启动入口在 apps/web/server.js)
+# 启动命令
 CMD ["node", "apps/web/server.js"]

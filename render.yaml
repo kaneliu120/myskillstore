@@ -40,6 +40,8 @@ services:
     dockerFilePath: web.Dockerfile
     dockerContext: .
     envVars:
+      - key: PORT
+        value: 10000
       - key: NEXT_PUBLIC_API_URL
         fromService:
           type: web
