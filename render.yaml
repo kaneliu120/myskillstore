@@ -1,0 +1,56 @@
+services:
+  # 后端 API 服务
+  - type: web
+    name: myskillshop-api
+    env: node
+    plan: free
+    dockerFilePath: ./deploy/api.Dockerfile
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: DB_HOST
+        fromDatabase:
+          name: myskillshop-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: myskillshop-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: myskillshop-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: myskillshop-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: myskillshop-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+
+  # 前端 Web 服务
+  - type: web
+    name: myskillshop-web
+    env: node
+    plan: free
+    dockerFilePath: ./deploy/web.Dockerfile
+    dockerContext: .
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: myskillshop-api
+          property: url
+          # Render 的内部 URL 格式通常是 http://<service-name>:<port>
+          # 但前端是浏览器跑的，必须用公网 URL
+          # Render 会自动注入该服务的公网 URL 变量
+
+databases:
+  - name: myskillshop-db
+    plan: free
+    databaseName: myskillshop
+    user: admin
