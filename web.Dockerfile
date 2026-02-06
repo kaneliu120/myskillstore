@@ -20,8 +20,8 @@ COPY . .
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
-# 构建前端
-RUN npm run build --workspace=apps/web
+# 构建前端 - 显式禁用 Turbopack 以规避 lightningcss 原生绑定在 Docker 环境下的兼容性问题
+RUN npm run build --workspace=apps/web -- --no-turbo
 
 # 阶段 2：生产运行环境
 FROM node:20-slim AS runner
