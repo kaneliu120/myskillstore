@@ -375,27 +375,42 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="container mx-auto max-w-5xl">
+      <section className="py-24 px-6 bg-gray-100">
+        <div className="container mx-auto max-w-6xl">
           <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">
             {isZh ? '如何开始' : 'How It Works'}
           </h2>
-          <div className="w-16 h-1 bg-purple-600 mx-auto mb-16"></div>
+          <div className="w-16 h-1 bg-purple-600 mx-auto mb-20"></div>
           
-          <div className="flex flex-col md:flex-row items-start justify-between gap-8">
+          {/* Steps Row */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
             {steps.map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center flex-1">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                    <step.icon className="w-8 h-8 text-white" />
+              <div key={idx} className="flex items-center">
+                {/* Step Card */}
+                <div className="flex flex-col items-center text-center w-[200px]">
+                  {/* Icon Circle */}
+                  <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl shadow-purple-200 mb-6">
+                    <step.icon className="w-10 h-10 text-white" strokeWidth={1.5} />
                   </div>
-                  {idx < 3 && (
-                    <div className="hidden md:block text-purple-300 text-2xl">→</div>
-                  )}
+                  
+                  {/* Number */}
+                  <div className="text-purple-600 font-bold text-2xl mb-3">{step.num}</div>
+                  
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">{step.title}</h3>
+                  
+                  {/* Description */}
+                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
                 </div>
-                <div className="text-purple-600 font-bold text-xl mb-2">{step.num}</div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed max-w-[200px]">{step.desc}</p>
+                
+                {/* Arrow Connector */}
+                {idx < 3 && (
+                  <div className="hidden md:flex items-center justify-center w-16 -mt-32">
+                    <svg width="40" height="20" viewBox="0 0 40 20" fill="none" className="text-purple-300">
+                      <path d="M0 10H35M35 10L28 3M35 10L28 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                )}
               </div>
             ))}
           </div>
