@@ -383,12 +383,12 @@ export default function HomePage() {
           <div className="w-16 h-1 bg-purple-600 mx-auto mb-20"></div>
           
           {/* Steps Row */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-2">
             {steps.map((step, idx) => (
-              <div key={idx} className="flex items-center">
+              <div key={idx} className="flex items-center flex-1">
                 {/* Step Card */}
-                <div className="flex flex-col items-center text-center w-[220px]">
-                  {/* Icon Circle - 放大80% */}
+                <div className="flex flex-col items-center text-center w-full max-w-[280px] mx-auto">
+                  {/* Icon Circle */}
                   <div className="w-[140px] h-[140px] bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl shadow-purple-200 mb-8">
                     <step.icon className="w-16 h-16 text-white" strokeWidth={1.5} />
                   </div>
@@ -396,15 +396,15 @@ export default function HomePage() {
                   {/* Title */}
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
                   
-                  {/* Description - 两行显示 */}
-                  <p className="text-sm text-gray-500 leading-6 line-clamp-2 h-12">{step.desc}</p>
+                  {/* Description - 完整显示 */}
+                  <p className="text-sm text-gray-500 leading-6">{step.desc}</p>
                 </div>
                 
                 {/* Arrow Connector */}
                 {idx < 3 && (
-                  <div className="hidden md:flex items-center justify-center w-12 -mt-24">
-                    <svg width="32" height="16" viewBox="0 0 32 16" fill="none" className="text-purple-300">
-                      <path d="M0 8H28M28 8L22 2M28 8L22 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <div className="hidden md:flex items-center justify-center w-8 -mt-24 flex-shrink-0">
+                    <svg width="24" height="12" viewBox="0 0 24 12" fill="none" className="text-purple-300">
+                      <path d="M0 6H20M20 6L15 1M20 6L15 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                 )}
