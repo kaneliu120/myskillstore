@@ -17,10 +17,12 @@ COPY . .
 RUN npm run build --workspace=apps/api
 
 # 阶段 2：生产运行环境
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+# 统一使用 Render 端口
+ENV PORT=10000
 
 # 复制构建产物和必要的依赖
 COPY --from=builder /app/node_modules ./node_modules
@@ -29,7 +31,7 @@ COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 
 # 暴露端口
-EXPOSE 3001
+EXPOSE 10000
 
 # 启动命令
 CMD ["node", "apps/api/dist/main"]

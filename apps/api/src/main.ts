@@ -7,7 +7,7 @@ async function bootstrap() {
   
   // Enable CORS for frontend
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: true, // 生产环境允许所有来源，或者您可以填入具体前端域名
     credentials: true,
   });
 
