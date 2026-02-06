@@ -16,7 +16,7 @@ RUN npm ci
 # 复制源码
 COPY . .
 
-# 设置构建时的环境变量
+# 设置构建时的环境变量（Next.js 需要在构建时知道 API 地址）
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
