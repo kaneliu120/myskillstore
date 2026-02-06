@@ -7,11 +7,11 @@ COPY package*.json ./
 COPY apps/api/package*.json ./apps/api/
 COPY apps/web/package*.json ./apps/web/
 
-# 显式安装适用于 Debian (GNU) 的 lightningcss 绑定包
-RUN npm install --save-dev lightningcss-linux-x64-gnu --workspace=apps/web
+# 显式安装适用于 Debian (GNU) 的原生绑定包，彻底解决 Tailwind v4 在 Docker 中的兼容性问题
+RUN npm install --save-dev lightningcss-linux-x64-gnu @tailwindcss/oxide-linux-x64-gnu --workspace=apps/web
 
 # 安装依赖
-RUN rm -rf node_modules && npm ci
+RUN npm ci
 
 # 复制源码
 COPY . .
