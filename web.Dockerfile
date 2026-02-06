@@ -18,7 +18,8 @@ COPY . .
 
 # 设置构建时的环境变量（提供一个占位符，防止构建失败，真正的值在运行时由 Render 注入）
 ARG NEXT_PUBLIC_API_URL=https://api-placeholder-build-time
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+# ⚠️ 注意：不要用 ENV 指令将其固化到镜像中，否则可能干扰运行时的注入
+# ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # 打印构建时的 API URL 以便调试
 RUN echo "Building with API URL: $NEXT_PUBLIC_API_URL"
@@ -46,5 +47,5 @@ COPY --from=builder /app/apps/web/messages ./apps/web/messages
 
 EXPOSE 10000
 
-# 启动命令
-CMD ["node", "apps/web/server.js"]
+# 启动命令：启动前打印关键环境变量，确认 Render 注入是否成功
+CMD ["sh", "-c", "echo 'Starting web server...' && echo \"SERVER_API_URL is: $SERVER_API_URL\" && node apps/web/server.js"]
