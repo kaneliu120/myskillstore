@@ -32,9 +32,9 @@ const MY_ORDERS = [
 
 // Mock products (as seller)
 const MY_PRODUCTS = [
-  { id: 'PROD001', title: 'Advanced Trading Agent', price: 150, sales: 8, status: 'active', created: '2026-01-15' },
-  { id: 'PROD002', title: 'DeFi Analytics Dashboard', price: 99, sales: 4, status: 'active', created: '2026-01-20' },
-  { id: 'PROD003', title: 'NFT Minting Bot', price: 199, sales: 0, status: 'pending', created: '2026-02-03' },
+  { id: 1, title: 'Advanced Trading Agent', price: 150, sales: 8, status: 'active', created: '2026-01-15' },
+  { id: 2, title: 'DeFi Analytics Dashboard', price: 99, sales: 4, status: 'active', created: '2026-01-20' },
+  { id: 3, title: 'NFT Minting Bot', price: 199, sales: 0, status: 'pending', created: '2026-02-03' },
 ];
 
 // Mock sales (as seller)
@@ -203,9 +203,9 @@ export default function UserDashboard() {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-white">${product.price}</p>
-                        <Link href={`/products/${product.id}/edit`}>
+                        <Link href={`/products/${product.id}`}>
                           <Button variant="ghost" size="sm" className="text-blue-400 hover:text-blue-300 mt-1">
-                            {t('products.edit')}
+                            {t('products.view')}
                           </Button>
                         </Link>
                       </div>
