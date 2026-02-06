@@ -128,6 +128,37 @@
       "buyer": "Buyer"
     }
   },
+  "ProductDetail": {
+    "nav": {
+      "dashboard": "Dashboard"
+    },
+    "reviews": "reviews",
+    "sales": "sales",
+    "description": "Description",
+    "oneTime": "One-time payment",
+    "buyNow": "Buy Now",
+    "delivery": {
+      "auto": "Instant Delivery",
+      "autoDesc": "File will be delivered automatically after payment confirmation",
+      "manual": "Manual Delivery",
+      "manualDesc": "Seller will contact you via Telegram after payment"
+    },
+    "payment": {
+      "instruction": "Send exact amount to the wallet address below, then click confirm:",
+      "wallet": "Wallet Address",
+      "confirm": "I've Made Payment"
+    },
+    "trust": {
+      "secure": "Secure",
+      "direct": "Direct Payment"
+    },
+    "seller": {
+      "title": "About the Seller",
+      "sales": "sales",
+      "joined": "Joined",
+      "contact": "Contact Seller"
+    }
+  },
   "CreateProduct": {
     "title": "Create New Product",
     "step": "Step",

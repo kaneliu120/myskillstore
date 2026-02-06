@@ -128,6 +128,37 @@
       "buyer": "买家"
     }
   },
+  "ProductDetail": {
+    "nav": {
+      "dashboard": "控制台"
+    },
+    "reviews": "评价",
+    "sales": "销量",
+    "description": "产品描述",
+    "oneTime": "一次性付款",
+    "buyNow": "立即购买",
+    "delivery": {
+      "auto": "即时交付",
+      "autoDesc": "付款确认后系统自动发送文件",
+      "manual": "人工交付",
+      "manualDesc": "卖家将在付款后通过 Telegram 联系您"
+    },
+    "payment": {
+      "instruction": "请向以下钱包地址发送准确金额，然后点击确认：",
+      "wallet": "钱包地址",
+      "confirm": "我已付款"
+    },
+    "trust": {
+      "secure": "安全",
+      "direct": "直接付款"
+    },
+    "seller": {
+      "title": "关于卖家",
+      "sales": "销量",
+      "joined": "加入于",
+      "contact": "联系卖家"
+    }
+  },
   "CreateProduct": {
     "title": "发布新产品",
     "step": "步骤",
