@@ -28,7 +28,7 @@ services:
       - key: PORT
         value: 10000
       - key: NEXT_PUBLIC_API_URL
-        value: https://my-skill-shop.onrender.com
+        value: https://my-skill-api-kane.onrender.com
 
 databases:
   - name: myskillshop-db
