@@ -15,7 +15,7 @@ export class ProductsController {
   create(@Req() req: Request & { user: any }, @Body() createProductDto: CreateProductDto) {
     return this.productsService.create({
       ...createProductDto,
-      seller_id: req.user?.sub || 1, // Default to user 1 for testing
+      seller_id: req.user?.sub || null, // null for testing (no auth)
       status: ProductStatus.PENDING_REVIEW,
     });
   }
