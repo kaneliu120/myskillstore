@@ -20,6 +20,9 @@ COPY . .
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
+# 打印构建时的 API URL 以便调试
+RUN echo "Building with API URL: $NEXT_PUBLIC_API_URL"
+
 # 增加时间戳强制让构建步骤重新执行，确保环境变量生效
 RUN date > /app/build_date.txt
 
