@@ -43,7 +43,7 @@ services:
       - key: PORT
         value: 10000
       - key: NEXT_PUBLIC_API_URL
-        value: https://myskillshop-api.onrender.com
+        value: https://my-skill-shop.onrender.com
 
 databases:
   - name: myskillshop-db
