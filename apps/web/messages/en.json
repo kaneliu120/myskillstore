@@ -114,7 +114,8 @@
       "add": "Add Product",
       "sales": "Sales",
       "created": "Created",
-      "edit": "Edit"
+      "edit": "Edit",
+      "view": "View"
     },
     "orders": {
       "title": "My Orders",

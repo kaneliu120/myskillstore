@@ -114,7 +114,8 @@
       "add": "添加产品",
       "sales": "销量",
       "created": "创建时间",
-      "edit": "编辑"
+      "edit": "编辑",
+      "view": "查看"
     },
     "orders": {
       "title": "我的订单",
