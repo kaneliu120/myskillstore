@@ -2,7 +2,7 @@ services:
   # 后端 API 服务
   - type: web
     name: my-skill-api-kane
-    env: node
+    env: docker
     plan: free
     dockerFilePath: api.Dockerfile
     dockerContext: .
@@ -19,8 +19,9 @@ services:
   # 前端 Web 服务
   - type: web
     name: myskillshop-web
-    env: node
+    env: docker
     plan: free
+    healthCheckPath: /
     dockerFilePath: web.Dockerfile
     dockerContext: .
     envVars:
