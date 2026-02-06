@@ -58,7 +58,15 @@ export default function ProductsPage() {
       ) : products.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard 
+              key={product.id} 
+              id={String(product.id)} 
+              title={product.title}
+              price={parseFloat(product.price)}
+              author={product.seller.username}
+              coverUrl={product.image_url || undefined}
+              category={product.category}
+            />
           ))}
         </div>
       ) : (
