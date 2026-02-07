@@ -1,132 +1,33 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { Boxes, DollarSign, Wallet, Brain, Globe, TrendingUp, Search, User, ChevronDown, Check, Plus, Minus } from 'lucide-react';
+import ProductCard from '@/components/product/ProductCard';
 import { Input } from '@/components/ui/input';
-import { 
-  Search, Star, ShoppingCart, CheckCircle, ShieldCheck, Zap, 
-  Boxes, User, ChevronDown, Check, Menu, X
-} from "lucide-react";
+import { useState, useEffect, useRef } from 'react';
 import api from '@/lib/api';
 
-// --- Types ---
 interface Product {
   id: number;
   title: string;
   price_usd: number;
   seller: { nickname: string };
   category: string;
-  image_url?: string;
-  rating?: number;
-  reviews?: number;
 }
-
-// --- Components ---
-
-function ModernProductCard({ 
-  id, 
-  title, 
-  price, 
-  authorName, 
-  rating = 5.0, 
-  reviews = 0,
-  imageUrl, 
-  category 
-}: { 
-  id: string, 
-  title: string, 
-  price: number, 
-  authorName: string, 
-  rating?: number, 
-  reviews?: number,
-  imageUrl?: string, 
-  category: string 
-}) {
-  return (
-    <Link href={`/products/${id}`} className="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-slate-200 transition-all hover:shadow-xl hover:-translate-y-1 h-full">
-      {/* Image Area - 4:3 Aspect Ratio */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-        {imageUrl ? (
-          <img 
-            src={imageUrl} 
-            alt={title} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-            <Boxes className="w-12 h-12 text-indigo-200" />
-          </div>
-        )}
-        
-        {/* Floating Cart Button */}
-        <div className="absolute bottom-4 right-4 opacity-0 transform translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 z-10">
-          <button className="bg-white p-3 rounded-full shadow-lg text-slate-900 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
-            <ShoppingCart className="w-5 h-5" />
-          </button>
-        </div>
-        
-        {/* Category Badge */}
-        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700 shadow-sm">
-          {category}
-        </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-bold text-slate-900 line-clamp-2 mb-2 group-hover:text-indigo-600 transition-colors h-[3.5rem]">
-          {title}
-        </h3>
-
-        {/* Author & Rating */}
-        <div className="mt-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="relative w-6 h-6 rounded-full overflow-hidden bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-600 border border-indigo-200">
-              {authorName[0]?.toUpperCase()}
-            </div>
-            <span className="text-sm text-slate-500 truncate max-w-[80px]">{authorName}</span>
-          </div>
-          <div className="flex items-center gap-1 text-amber-400">
-            <Star className="w-4 h-4 fill-current" />
-            <span className="text-sm font-medium text-slate-700">{rating}</span>
-            {reviews > 0 && <span className="text-xs text-slate-400">({reviews})</span>}
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="my-4 h-px w-full bg-slate-100" />
-
-        {/* Price Area */}
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">One-time payment</span>
-            <span className="text-xl font-bold text-slate-900">${price}</span>
-          </div>
-          <span className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 flex items-center gap-1 group/btn">
-            View Details <span className="transition-transform group-hover/btn:translate-x-1">&rarr;</span>
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-// --- Main Page Component ---
 
 export default function HomePage() {
   const t = useTranslations('HomePage');
   const locale = useLocale();
-  const isZh = locale === 'zh';
-  
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
   const [langOpen, setLangOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const langRef = useRef<HTMLDivElement>(null);
 
-  // Fetch Products
+  const isZh = locale === 'zh';
+
   const fetchProducts = async (searchQuery = '') => {
     try {
       const response = await api.get('/products', {
@@ -142,7 +43,6 @@ export default function HomePage() {
     fetchProducts();
   }, []);
 
-  // Language Dropdown Click Outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langRef.current && !langRef.current.contains(event.target as Node)) {
@@ -163,275 +63,460 @@ export default function HomePage() {
     { code: 'en', label: 'English', flag: '🇺🇸' },
     { code: 'zh', label: '中文', flag: '🇨🇳' },
   ];
+
   const currentLang = languages.find(l => l.code === locale) || languages[0];
 
-  // Demo Data for Empty State
-  const demoProducts = [
-    { id: 101, title: isZh ? '智能文案撰写助手' : 'Smart Copywriting Assistant', price: 99, author: 'Alex Chen', category: 'Prompt', rating: 4.9, reviews: 128 },
-    { id: 102, title: isZh ? 'Next.js SaaS 启动模板' : 'Next.js SaaS Starter Kit', price: 149, author: 'Code Master', category: 'Code', rating: 5.0, reviews: 85 },
-    { id: 103, title: isZh ? 'Midjourney 肖像提示词包' : 'Midjourney Portrait Prompts', price: 29, author: 'Art AI', category: 'Prompt', rating: 4.8, reviews: 210 },
-    { id: 104, title: isZh ? '自动化 SEO 工作流' : 'Automated SEO Workflow', price: 79, author: 'Growth Hacker', category: 'Workflow', rating: 4.7, reviews: 56 },
-    { id: 105, title: isZh ? '跨境电商数据分析脚本' : 'E-commerce Data Script', price: 59, author: 'Data Wizard', category: 'Code', rating: 4.9, reviews: 92 },
-    { id: 106, title: isZh ? '虚拟人直播配置全套' : 'Virtual Streamer Setup', price: 299, author: 'Live Tech', category: 'Tech', rating: 4.6, reviews: 34 },
-    { id: 107, title: isZh ? 'Notion 人生管理系统' : 'Notion Life OS', price: 39, author: 'Productivity', category: 'Template', rating: 5.0, reviews: 300 },
-    { id: 108, title: isZh ? 'UI 设计系统 Figma 源文件' : 'UI Design System Figma', price: 89, author: 'Design Pro', category: 'Design', rating: 4.8, reviews: 150 },
+  const faqs = isZh ? [
+    { q: '我如何注册或登录？', a: '点击右上角的"登录/注册"按钮，使用邮箱注册新账户或登录现有账户。' },
+    { q: '我如何创建和发布我的技能文件？', a: '登录后，前往"技能发布"页面，填写技能信息、设置价格、上传文件即可提交审核。' },
+    { q: '平台如何收费？', a: '我们采用极低的平台服务费，让创作者获得最大收益。具体费率请查看技能发布页。' },
+    { q: '支持哪些支付方式？', a: '目前支持 USDT/USDC 等主流加密货币，买家直接支付到您的钱包地址。' },
+    { q: '如何保护我的知识产权？', a: '平台采用区块链技术进行版权确权，智能合约保障交易安全。' },
+  ] : [
+    { q: 'How do I register or log in?', a: 'Click the "Login / Register" button in the top right corner to create a new account with your email or sign in to an existing account.' },
+    { q: 'How do I create and publish my skill?', a: 'After logging in, go to the "Publish Skill" page, fill in your skill details, set your price, upload your files, and submit for review.' },
+    { q: 'What are the platform fees?', a: 'We charge minimal platform fees to maximize creator earnings. Check the Publish Skill page for specific rates.' },
+    { q: 'What payment methods are supported?', a: 'We currently support major cryptocurrencies like USDT/USDC. Buyers pay directly to your wallet address.' },
+    { q: 'How is my intellectual property protected?', a: 'The platform uses blockchain technology for copyright verification, with smart contracts ensuring secure transactions.' },
   ];
 
-  const categories = isZh ? 
-    ['全部', 'AI 提示词', '代码模板', '工作流', '设计资产'] : 
-    ['All', 'AI Prompts', 'Code Templates', 'Workflows', 'Design Assets'];
+  const demoProducts = isZh ? [
+    { title: '智能文案撰写助手', author: '李明', price: 99, category: '文本生成', color: 'bg-amber-100' },
+    { title: '科幻场景生成器', author: '王晓华', price: 129, category: '图像创作', color: 'bg-purple-100' },
+    { title: '商业数据洞察', author: '张伟', price: 150, category: '数据分析', color: 'bg-blue-100' },
+    { title: '多语种语音克隆', author: '陈静', price: 199, category: '语音合成', color: 'bg-pink-100' },
+    { title: 'Python 自动化脚本', author: '刘强', price: 89, category: '编程开发', color: 'bg-green-100' },
+    { title: 'AI 法律顾问 Prompt', author: '赵敏', price: 299, category: '法律咨询', color: 'bg-red-100' },
+    { title: '跨境电商选品模型', author: '孙浩', price: 199, category: '电商运营', color: 'bg-orange-100' },
+    { title: '虚拟人直播配置', author: '周杰', price: 350, category: '直播技术', color: 'bg-indigo-100' },
+  ] : [
+    { title: 'Smart Copywriting Assistant', author: 'Alex Chen', price: 99, category: 'Text Generation', color: 'bg-amber-100' },
+    { title: 'Sci-Fi Scene Generator', author: 'Maria Wang', price: 129, category: 'Image Creation', color: 'bg-purple-100' },
+    { title: 'Business Data Insights', author: 'James Liu', price: 150, category: 'Data Analysis', color: 'bg-blue-100' },
+    { title: 'Multi-Language Voice Clone', author: 'Sarah Kim', price: 199, category: 'Voice Synthesis', color: 'bg-pink-100' },
+    { title: 'Python Automation Script', author: 'David Liu', price: 89, category: 'Development', color: 'bg-green-100' },
+    { title: 'AI Legal Advisor Prompt', author: 'Emily Zhao', price: 299, category: 'Legal', color: 'bg-red-100' },
+    { title: 'Cross-border E-commerce Model', author: 'Kevin Sun', price: 199, category: 'E-commerce', color: 'bg-orange-100' },
+    { title: 'Virtual Streamer Setup', author: 'Jay Zhou', price: 350, category: 'Live Streaming', color: 'bg-indigo-100' },
+  ];
+
+  const steps = isZh ? [
+    { icon: Wallet, num: '01', title: '创建账户', desc: '注册您的账户，开启智慧创造者之旅' },
+    { icon: Brain, num: '02', title: '封装智慧', desc: '将你的天赋与知识技能转化为AI 智能体可使用的技能功能' },
+    { icon: Globe, num: '03', title: '轻松发布', desc: '利用平台的功能，轻松将您的技能知识产权，发布到全球市场' },
+    { icon: TrendingUp, num: '04', title: '建立品牌', desc: '随着您的客户规模的成长，让您的知识产权为您带来长期且稳定的被动收入。' },
+  ] : [
+    { icon: Wallet, num: '01', title: 'Create Account', desc: 'Register your account and start your journey as a wisdom creator.' },
+    { icon: Brain, num: '02', title: 'Package Wisdom', desc: 'Transform your talents and knowledge into functional skills usable by AI agents.' },
+    { icon: Globe, num: '03', title: 'Easy Publish', desc: 'Use platform features to easily publish your intellectual property to the global market.' },
+    { icon: TrendingUp, num: '04', title: 'Build Your Brand', desc: 'As your client base grows, let your intellectual property bring you long-term, stable passive income.' },
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900">
-      
-      {/* 1. Navbar */}
-      <nav className="bg-white/90 backdrop-blur-xl border-b border-slate-200 fixed w-full z-50 transition-all duration-300">
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+      {/* Navbar */}
+      <nav className="bg-white border-b border-gray-200 fixed w-full z-50">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-200">
-              <Boxes className="w-5 h-5" />
-            </div>
-            <Link href="/" className="text-xl font-bold tracking-tight text-slate-900">
-              {t('nav.brand')}
-            </Link>
-          </div>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <Link href="/" className="text-indigo-600 hover:text-indigo-700">{isZh ? '首页' : 'Home'}</Link>
-            <Link href="/products" className="hover:text-indigo-600 transition-colors">{isZh ? '技能探索' : 'Explore'}</Link>
-            <Link href="/products/create" className="hover:text-indigo-600 transition-colors">{isZh ? '技能发布' : 'Publish'}</Link>
-            <Link href="#faq" className="hover:text-indigo-600 transition-colors">{isZh ? '常见问题' : 'FAQ'}</Link>
-          </div>
-
-          {/* Right Actions */}
+          {/* Left: Brand + Language Dropdown */}
           <div className="flex items-center gap-4">
-             {/* Language Selector */}
-             <div className="relative hidden sm:block" ref={langRef}>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                <Boxes className="w-5 h-5 text-white" />
+              </div>
+              <Link href="/" className="text-lg font-bold text-gray-900">
+                {t('nav.brand')}
+              </Link>
+            </div>
+            
+            {/* Language Dropdown */}
+            <div className="relative" ref={langRef}>
               <button
                 onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
               >
                 <span>{currentLang.flag}</span>
-                <span className="hidden lg:inline">{currentLang.label}</span>
-                <ChevronDown className={`w-3 h-3 transition-transform ${langOpen ? 'rotate-180' : ''}`} />
+                <span className="hidden sm:inline">{currentLang.label}</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${langOpen ? 'rotate-180' : ''}`} />
               </button>
               
               {langOpen && (
-                <div className="absolute top-full right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl py-1 min-w-[140px] animate-in fade-in zoom-in-95 duration-200">
+                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[140px]">
                   {languages.map(lang => (
                     <Link
                       key={lang.code}
                       href={`/${lang.code}`}
-                      className={`flex items-center gap-3 px-4 py-2 text-sm hover:bg-slate-50 ${locale === lang.code ? 'text-indigo-600 bg-indigo-50/50' : 'text-slate-700'}`}
+                      className={`flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 ${locale === lang.code ? 'text-purple-600 bg-purple-50' : 'text-gray-700'}`}
                       onClick={() => setLangOpen(false)}
                     >
                       <span>{lang.flag}</span>
                       <span>{lang.label}</span>
-                      {locale === lang.code && <Check className="w-3 h-3 ml-auto" />}
+                      {locale === lang.code && <Check className="w-4 h-4 ml-auto" />}
                     </Link>
                   ))}
                 </div>
               )}
             </div>
-
-            <Link href="/user">
-              <Button variant="ghost" className="hidden sm:flex text-slate-600 hover:text-indigo-600 hover:bg-indigo-50">
-                {isZh ? '登录' : 'Log in'}
-              </Button>
-            </Link>
-            <Link href="/products/create">
-              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-5 shadow-lg shadow-indigo-200 transition-all hover:-translate-y-0.5">
-                {isZh ? '发布技能' : 'Start Selling'}
-              </Button>
-            </Link>
-
-            {/* Mobile Menu Toggle */}
-            <button className="md:hidden p-2 text-slate-600" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* 2. Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden bg-slate-50">
-        {/* Background Aura */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] opacity-20 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 blur-[100px] rounded-full pointer-events-none" />
-        
-        <div className="container mx-auto max-w-4xl text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold mb-8 border border-indigo-100 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            {isZh ? '全球首个 AI 技能去中心化交易平台' : 'The First Decentralized AI Skill Marketplace'}
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.15] animate-in fade-in slide-in-from-bottom-5 duration-1000 fill-mode-backwards delay-100">
-            {isZh ? '发现并获取' : 'Discover & Acquire'} <br className="hidden md:block" />
-            <span className="text-indigo-600 relative inline-block whitespace-nowrap">
-              {isZh ? '顶尖的数字技能' : 'Top-Tier Digital Skills'}
-              <svg className="absolute w-full h-3 -bottom-1 left-0 text-indigo-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
-                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
-              </svg>
-            </span>
-          </h1>
+          {/* Center: Nav Links */}
+          <div className="hidden md:flex items-center gap-8 text-sm text-gray-600">
+            <Link href="/" className="text-purple-600 font-medium border-b-2 border-purple-600 pb-5 -mb-5">
+              {isZh ? '首页' : 'Home'}
+            </Link>
+            <Link href="/products" className="hover:text-purple-600 transition">
+              {isZh ? '技能探索' : 'Explore'}
+            </Link>
+            <Link href="/products/create" className="hover:text-purple-600 transition">
+              {isZh ? '技能发布' : 'Publish Skill'}
+            </Link>
+            <Link href="#faq" className="hover:text-purple-600 transition">
+              {isZh ? '常见问题' : 'FAQ'}
+            </Link>
+          </div>
           
-          <p className="text-lg md:text-xl text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-200">
-            {t('hero.subtitle')}
-          </p>
-
-          {/* Search Box */}
-          <div className="relative max-w-xl mx-auto mb-12 group animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300">
-            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full opacity-20 group-hover:opacity-30 blur transition duration-500"></div>
-            <div className="relative flex items-center bg-white rounded-full shadow-xl shadow-indigo-100/50 p-2 ring-1 ring-slate-200 focus-within:ring-2 focus-within:ring-indigo-500 transition-shadow">
-              <Search className="w-5 h-5 text-slate-400 ml-4 flex-shrink-0" />
-              <input 
-                type="text" 
-                placeholder={isZh ? "搜索技能 (例如: Next.js 模板, SEO Prompt)..." : "Search skills (e.g. Next.js Template)..."}
-                className="flex-1 border-none outline-none px-4 text-slate-700 placeholder:text-slate-400 h-10 bg-transparent min-w-0"
+          {/* Right: Search + Login */}
+          <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center relative">
+              <Search className="absolute left-3 w-4 h-4 text-gray-400" />
+              <Input 
+                placeholder={isZh ? '搜索技能...' : 'Search skills...'} 
+                className="pl-9 bg-gray-100 border-gray-200 focus-visible:ring-purple-500 rounded-lg h-10 w-64 text-sm"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleSearch}
               />
-              <Button onClick={() => fetchProducts(search)} className="rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 md:px-8 h-10 transition-transform active:scale-95">
-                {isZh ? '搜索' : 'Search'}
+            </div>
+            <Link href="/user">
+              <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg h-10 px-4 text-sm">
+                {isZh ? '登录 / 注册' : 'Login / Register'}
               </Button>
-            </div>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-slate-500 font-medium animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-400">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-indigo-500" />
-              {isZh ? '人工审核上架' : 'Curated Content'}
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              {isZh ? '即时自动交付' : 'Instant Delivery'}
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              {isZh ? '7天退款保证' : 'Money Back Guarantee'}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Categories (Optional Quick Filter) */}
-      <section className="border-b border-slate-200 bg-white sticky top-16 z-40 shadow-sm">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1 md:pb-0 md:justify-center">
-             {categories.map((cat, idx) => (
-               <button 
-                 key={idx} 
-                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                   idx === 0 
-                     ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' 
-                     : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-transparent hover:border-slate-200'
-                 }`}
-               >
-                 {cat}
-               </button>
-             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Products Grid */}
-      <section className="py-24 px-6 bg-slate-50/50">
-        <div className="container mx-auto max-w-7xl">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">{isZh ? '本周精选资源' : 'Featured This Week'}</h2>
-              <p className="text-slate-500 text-sm">{isZh ? '由社区评选出的最受欢迎技能' : 'Most popular skills voted by the community'}</p>
-            </div>
-            <Link href="/products" className="text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 text-sm group">
-              {isZh ? '查看全部' : 'View All'} <span className="text-lg transition-transform group-hover:translate-x-1">→</span>
+            </Link>
+            <Link href="/user">
+              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-gray-500" />
+              </div>
             </Link>
           </div>
+        </div>
+      </nav>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-white via-gray-50 to-purple-50/30">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text */}
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6 text-gray-900">
+                {t('hero.title')}
+              </h1>
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                {t('hero.subtitle')}
+              </p>
+              
+              <div className="flex gap-4">
+                <Link href="/products/create">
+                  <Button className="h-12 bg-purple-600 hover:bg-purple-700 text-white rounded-full px-8 text-base font-medium shadow-lg shadow-purple-200">
+                    {isZh ? '技能发布' : 'Publish Skill'}
+                  </Button>
+                </Link>
+                <Link href="#explore">
+                  <Button variant="outline" className="h-12 border-2 border-purple-200 text-purple-600 hover:bg-purple-50 rounded-full px-8 text-base font-medium">
+                    {isZh ? '探索技能' : 'Explore Skills'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            
+            {/* Right: Laptop Mockup */}
+            <div className="relative">
+              <div className="bg-gradient-to-br from-purple-100/50 to-blue-100/50 rounded-3xl p-8">
+                <div className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                  {/* Browser Chrome */}
+                  <div className="bg-gray-800 px-4 py-3 flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div className="flex-1 ml-4">
+                      <div className="bg-gray-700 rounded-md px-3 py-1 text-xs text-gray-400 max-w-xs">
+                        my-skill-shop.onrender.com
+                      </div>
+                    </div>
+                  </div>
+                  {/* Dashboard Preview */}
+                  <div className="bg-gray-900 p-4 min-h-[200px]">
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      <div className="bg-purple-600/20 rounded-lg p-3">
+                        <div className="text-purple-400 text-xs mb-1">{isZh ? '总收益' : 'Revenue'}</div>
+                        <div className="text-white font-bold">$52,598</div>
+                      </div>
+                      <div className="bg-blue-600/20 rounded-lg p-3">
+                        <div className="text-blue-400 text-xs mb-1">{isZh ? '订单数' : 'Orders'}</div>
+                        <div className="text-white font-bold">36</div>
+                      </div>
+                      <div className="bg-emerald-600/20 rounded-lg p-3">
+                        <div className="text-emerald-400 text-xs mb-1">{isZh ? '技能数' : 'Skills'}</div>
+                        <div className="text-white font-bold">62</div>
+                      </div>
+                    </div>
+                    <div className="bg-gray-800 rounded-lg p-3">
+                      <div className="text-gray-400 text-xs mb-2">{isZh ? '我的技能' : 'My Skills'}</div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-white">{isZh ? '智能文案撰写助手' : 'Smart Copywriting Assistant'}</span>
+                          <span className="text-purple-400">$99</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-white">{isZh ? '科幻场景生成器' : 'Sci-Fi Scene Generator'}</span>
+                          <span className="text-purple-400">$129</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-6 bg-gray-100/50">
+        <div className="container mx-auto max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="w-24 h-24 mx-auto mb-6 bg-purple-50 rounded-2xl flex items-center justify-center">
+                <Boxes className="w-12 h-12 text-purple-500" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4 text-gray-900">{t('hero.tag1_title')}</h3>
+              <p className="text-gray-600 text-center leading-relaxed">
+                {isZh ? (
+                  <>作为<span className="text-purple-600 font-medium">商业技能平台</span>的标准，这里可以获得<span className="text-purple-600 font-medium">各类AI智能体</span>所需的<span className="text-purple-600 font-medium">各领域技能</span>。</>
+                ) : (
+                  <>As the standard for <span className="text-purple-600 font-medium">commercial skill platforms</span>, access skills across <span className="text-purple-600 font-medium">all domains</span> required by <span className="text-purple-600 font-medium">various AI agents</span>.</>
+                )}
+              </p>
+            </div>
+            
+            {/* Feature 2 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="w-24 h-24 mx-auto mb-6 bg-purple-50 rounded-2xl flex items-center justify-center">
+                <DollarSign className="w-12 h-12 text-purple-500" />
+              </div>
+              <h3 className="text-xl font-bold text-center mb-4 text-gray-900">{t('hero.tag2_title')}</h3>
+              <p className="text-gray-600 text-center leading-relaxed">
+                {isZh ? (
+                  <>为了<span className="text-purple-600 font-medium">AI科技</span>与<span className="text-purple-600 font-medium">人类共赢</span>，我们将努力将<span className="text-purple-600 font-medium">交易成本</span>做到<span className="text-purple-600 font-medium">最低</span>。</>
+                ) : (
+                  <>For the mutual benefit of <span className="text-purple-600 font-medium">AI technology</span> and <span className="text-purple-600 font-medium">humanity</span>, we strive to keep <span className="text-purple-600 font-medium">transaction costs</span> to the <span className="text-purple-600 font-medium">absolute minimum</span>.</>
+                )}
+              </p>
+            </div>
+          </div>
+          
+          {/* Scroll Indicator */}
+          <div className="text-center mt-12">
+            <div className="text-purple-500 text-sm font-medium mb-2">SCROLL</div>
+            <ChevronDown className="w-6 h-6 text-purple-500 mx-auto animate-bounce" />
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Arrivals */}
+      <section id="explore" className="py-20 px-6 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <h2 className="text-3xl font-bold text-center mb-12 text-purple-600">
+            {isZh ? '最新上架' : 'Latest Arrivals'}
+          </h2>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.length > 0 ? (
               products.slice(0, 8).map(product => (
-                <ModernProductCard 
+                <ProductCard 
                   key={product.id} 
                   id={product.id.toString()}
                   title={product.title}
                   price={Number(product.price_usd)}
-                  authorName={product.seller?.nickname || 'Anonymous'}
+                  author={product.seller?.nickname || 'Anonymous'}
                   category={product.category || 'Other'}
-                  imageUrl={product.image_url}
-                  rating={5.0} // Placeholder rating if not in API
-                  reviews={Math.floor(Math.random() * 50)} // Random placeholder
                 />
               ))
             ) : (
-              // Show Demo Products
-              demoProducts.map((demo) => (
-                <ModernProductCard 
-                  key={demo.id} 
-                  id={demo.id.toString()}
-                  title={demo.title}
-                  price={demo.price}
-                  authorName={demo.author}
-                  category={demo.category}
-                  rating={demo.rating}
-                  reviews={demo.reviews}
-                />
-              ))
+              /* Demo Cards when no products */
+              <>
+                {demoProducts.map((demo, idx) => (
+                  <div key={idx} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition group">
+                    <div className="relative">
+                      <span className="absolute top-3 left-3 bg-purple-600 text-white text-xs px-3 py-1 rounded-full">
+                        {demo.category}
+                      </span>
+                      <div className={`h-40 ${demo.color} flex items-center justify-center`}>
+                        <Brain className="w-16 h-16 text-purple-300" />
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-bold text-gray-900 mb-1 group-hover:text-purple-600 transition">{demo.title}</h3>
+                      <p className="text-sm text-gray-500 mb-3">{isZh ? '创作者：' : 'By '}{demo.author}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xl font-bold text-purple-600">${demo.price}.00</span>
+                        <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white rounded-full text-xs px-4">
+                          {isZh ? '查看详情' : 'View'}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
+          </div>
+          
+          <div className="text-center mt-10">
+            <Link href="/products">
+              <Button variant="outline" className="border-purple-300 text-purple-600 hover:bg-purple-50 rounded-full px-8">
+                {isZh ? '查看全部 →' : 'View All →'}
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* 5. CTA Section */}
-      <section className="py-24 px-6 bg-slate-900 text-white overflow-hidden relative isolate">
-         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/30 blur-[120px] rounded-full pointer-events-none -z-10 translate-x-1/3 -translate-y-1/3" />
-         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/20 blur-[100px] rounded-full pointer-events-none -z-10 -translate-x-1/3 translate-y-1/3" />
-         
-         <div className="container mx-auto max-w-4xl text-center relative z-10">
-           <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">
-             {isZh ? '准备好出售你的智慧了吗？' : 'Ready to Monetize Your Wisdom?'}
-           </h2>
-           <p className="text-slate-300 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-             {isZh ? '加入 10,000+ 创作者的行列。将你的专业知识打包成产品，建立被动收入流。我们提供最低的手续费和最广的全球市场。' : 'Join 10,000+ creators. Package your expertise into products and build passive income streams. Lowest fees, global reach.'}
-           </p>
-           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             <Link href="/products/create">
-               <Button className="w-full sm:w-auto bg-white text-slate-900 hover:bg-indigo-50 px-8 py-6 rounded-full text-lg font-bold shadow-xl shadow-white/10 transition-transform hover:-translate-y-1">
-                 {isZh ? '免费创建店铺' : 'Start Selling for Free'}
-               </Button>
-             </Link>
-             <Link href="/user">
-                <Button variant="outline" className="w-full sm:w-auto border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 px-8 py-6 rounded-full text-lg font-medium">
-                  {isZh ? '了解更多' : 'Learn More'}
-                </Button>
-             </Link>
-           </div>
-           <p className="mt-8 text-sm text-slate-500 font-medium">
-             {isZh ? '无需信用卡 · 5分钟完成设置 · 随时提现' : 'No credit card required · 5-min setup · Instant withdrawal'}
-           </p>
-         </div>
+      {/* How It Works */}
+      <section className="py-24 px-6 bg-gray-100">
+        <div className="container mx-auto max-w-6xl">
+          <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">
+            {isZh ? '如何开始' : 'How It Works'}
+          </h2>
+          <div className="w-16 h-1 bg-purple-600 mx-auto mb-20"></div>
+          
+          {/* Steps Row */}
+          <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-2">
+            {steps.map((step, idx) => (
+              <div key={idx} className="flex items-center flex-1">
+                {/* Step Card */}
+                <div className="flex flex-col items-center text-center w-full max-w-[280px] mx-auto">
+                  {/* Icon Circle */}
+                  <div className="w-[140px] h-[140px] bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl shadow-purple-200 mb-8">
+                    <step.icon className="w-16 h-16 text-white" strokeWidth={1.5} />
+                  </div>
+                  
+                  {/* Title */}
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                  
+                  {/* Description - 完整显示 */}
+                  <p className="text-sm text-gray-500 leading-6">{step.desc}</p>
+                </div>
+                
+                {/* Arrow Connector */}
+                {idx < 3 && (
+                  <div className="hidden md:flex items-center justify-center w-8 -mt-24 flex-shrink-0">
+                    <svg width="24" height="12" viewBox="0 0 24 12" fill="none" className="text-purple-300">
+                      <path d="M0 6H20M20 6L15 1M20 6L15 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-12 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-2 text-slate-900 font-bold text-lg">
-              <div className="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white text-xs">M</div>
-              My Skill Shop
+      {/* FAQ Section - Full Screen Height */}
+      <section id="faq" className="min-h-screen py-20 px-6 bg-white flex items-center">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">
+            {isZh ? '常见问题' : 'Frequently Asked Questions'}
+          </h2>
+          <div className="w-16 h-1 bg-purple-600 mx-auto mb-12"></div>
+          
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => (
+              <div 
+                key={idx} 
+                className="border border-gray-200 rounded-xl overflow-hidden"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition"
+                >
+                  <span className="font-medium text-gray-900">{faq.q}</span>
+                  {openFaq === idx ? (
+                    <Minus className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                  ) : (
+                    <Plus className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                  )}
+                </button>
+                {openFaq === idx && (
+                  <div className="px-5 pb-5 text-gray-600 leading-relaxed">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-12">
+            <p className="text-gray-500 mb-4">
+              {isZh ? '还有其他问题？' : 'Still have questions?'}
+            </p>
+            <Button variant="outline" className="border-purple-300 text-purple-600 hover:bg-purple-50 rounded-full px-8">
+              {isZh ? '联系我们' : 'Contact Us'}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer - Dark Space Gray */}
+      <footer className="py-16 bg-[#1a1a2e] text-white">
+        <div className="container mx-auto px-6 max-w-5xl">
+          <div className="grid md:grid-cols-4 gap-8 mb-12">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                  <Boxes className="w-5 h-5 text-white" />
+                </div>
+                <span className="font-bold text-white">{t('nav.brand')}</span>
+              </div>
+              <p className="text-sm text-gray-400">
+                {isZh ? 'AI驱动的专业技能变现平台' : 'AI-powered professional skill monetization platform'}
+              </p>
             </div>
-            <div className="text-slate-500 text-sm">
+            
+            {/* Links */}
+            <div>
+              <h4 className="font-bold text-white mb-4">{isZh ? '产品' : 'Product'}</h4>
+              <div className="space-y-2 text-sm">
+                <Link href="/products" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '技能探索' : 'Explore Skills'}</Link>
+                <Link href="/products/create" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '技能发布' : 'Publish Skill'}</Link>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-4">{isZh ? '资源' : 'Resources'}</h4>
+              <div className="space-y-2 text-sm">
+                <Link href="#faq" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '帮助中心' : 'Help Center'}</Link>
+                <Link href="#" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '开发者文档' : 'Developer Docs'}</Link>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-4">{isZh ? '关于' : 'About'}</h4>
+              <div className="space-y-2 text-sm">
+                <Link href="#" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '关于我们' : 'About Us'}</Link>
+                <Link href="#" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '联系我们' : 'Contact'}</Link>
+              </div>
+            </div>
+          </div>
+          
+          <div className="pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-gray-500 text-sm">
               © 2026 My Skill Shop. All rights reserved.
             </div>
-            <div className="flex gap-6 text-sm text-slate-500">
-               <Link href="#" className="hover:text-indigo-600 transition">{isZh ? '条款' : 'Terms'}</Link>
-               <Link href="#" className="hover:text-indigo-600 transition">{isZh ? '隐私' : 'Privacy'}</Link>
-               <Link href="#" className="hover:text-indigo-600 transition">{isZh ? '联系' : 'Contact'}</Link>
+            <div className="flex gap-4 text-sm">
+              <Link href="/en" className={`${locale === 'en' ? 'text-purple-400' : 'text-gray-500'} hover:text-purple-400 transition`}>English</Link>
+              <Link href="/zh" className={`${locale === 'zh' ? 'text-purple-400' : 'text-gray-500'} hover:text-purple-400 transition`}>中文</Link>
             </div>
           </div>
         </div>
