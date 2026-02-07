@@ -50,7 +50,7 @@ export default function LoginPage() {
             </div>
           </div>
           <Link href="/" className="text-2xl font-bold text-gray-900 mb-2 inline-block">
-            My Skill Shop
+            MySkillStore
           </Link>
           <CardTitle className="text-xl text-gray-900">{t('login.title')}</CardTitle>
           <CardDescription className="text-gray-500">{t('login.subtitle')}</CardDescription>

@@ -78,7 +78,7 @@ export default function ProductDetailPage() {
                 <Boxes className="w-5 h-5 text-white" />
               </div>
               <Link href="/" className="text-lg font-bold text-gray-900">
-                My Skill Shop
+                MySkillStore
               </Link>
             </div>
           </div>

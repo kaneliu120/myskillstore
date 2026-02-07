@@ -52,7 +52,7 @@ export default function RegisterPage() {
             </div>
           </div>
           <Link href="/" className="text-2xl font-bold text-gray-900 mb-2 inline-block">
-            My Skill Shop
+            MySkillStore
           </Link>
           <CardTitle className="text-xl text-gray-900">{t('register.title')}</CardTitle>
           <CardDescription className="text-gray-500">{t('register.subtitle')}</CardDescription>

@@ -92,7 +92,7 @@ export default function ProductsPage() {
               <Boxes className="w-5 h-5 text-white" />
             </div>
             <Link href="/" className="text-lg font-bold text-gray-900">
-              My Skill Shop
+              MySkillStore
             </Link>
           </div>
           
@@ -209,7 +209,7 @@ export default function ProductsPage() {
 
       {/* Footer */}
       <footer className="py-8 bg-[#1a1a2e] text-center">
-        <p className="text-gray-500 text-sm">© 2026 My Skill Shop. All rights reserved.</p>
+        <p className="text-gray-500 text-sm">© 2026 MySkillStore. All rights reserved.</p>
       </footer>
     </div>
   );

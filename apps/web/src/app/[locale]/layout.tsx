@@ -7,7 +7,7 @@ import "../globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My Skill Shop",
+  title: "MySkillStore",
   description: "C2C AI Skill Marketplace",
 };
 

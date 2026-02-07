@@ -240,7 +240,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex-1 ml-4">
                       <div className="bg-gray-700 rounded-md px-3 py-1 text-xs text-gray-400 max-w-xs">
-                        my-skill-shop.onrender.com
+                        myskillstore.dev
                       </div>
                     </div>
                   </div>
@@ -512,7 +512,7 @@ export default function HomePage() {
           
           <div className="pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-gray-500 text-sm">
-              © 2026 My Skill Shop. All rights reserved.
+              © 2026 MySkillStore. All rights reserved.
             </div>
             <div className="flex gap-4 text-sm">
               <Link href="/en" className={`${locale === 'en' ? 'text-purple-400' : 'text-gray-500'} hover:text-purple-400 transition`}>English</Link>

@@ -1,4 +1,4 @@
-# My Skill Shop (v2.0)
+# MySkillStore (v2.0)
 
 A C2C marketplace for AI skills with crypto payment and delivery automation.
 

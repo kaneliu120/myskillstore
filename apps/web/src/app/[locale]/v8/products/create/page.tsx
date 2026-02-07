@@ -87,7 +87,7 @@ export default function CreateProductPageV8() {
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
               <Boxes className="w-5 h-5" />
             </div>
-            <span>My Skill Shop</span>
+            <span>MySkillStore</span>
           </Link>
           
           <nav className="space-y-6 md:space-y-8 relative">

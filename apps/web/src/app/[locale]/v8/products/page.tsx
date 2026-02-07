@@ -166,7 +166,7 @@ export default function ProductsPageV8() {
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
               <Boxes className="w-4 h-4" />
             </div>
-            <span className="hidden sm:inline">My Skill Shop</span>
+            <span className="hidden sm:inline">MySkillStore</span>
           </Link>
           <div className="h-6 w-px bg-slate-200 mx-2 hidden sm:block"></div>
           <div className="text-sm font-medium text-slate-500 hidden sm:block">

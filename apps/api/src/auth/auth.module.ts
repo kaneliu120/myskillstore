@@ -15,7 +15,7 @@ import { UsersModule } from '../users/users.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'my-skill-shop-secret-key',
+        secret: configService.get<string>('JWT_SECRET') || 'myskillstore-secret-key',
         signOptions: { expiresIn: '7d' },
       }),
       inject: [ConfigService],

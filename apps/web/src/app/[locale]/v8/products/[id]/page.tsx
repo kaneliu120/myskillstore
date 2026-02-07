@@ -103,7 +103,7 @@ export default function ProductDetailPageV8() {
           <div className="h-6 w-px bg-slate-200"></div>
           <Link href="/v8" className="flex items-center gap-2 font-bold text-slate-900">
             <div className="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white text-xs">M</div>
-            <span className="hidden sm:inline">My Skill Shop</span>
+            <span className="hidden sm:inline">MySkillStore</span>
           </Link>
         </div>
         
@@ -289,7 +289,7 @@ export default function ProductDetailPageV8() {
 
       {/* Footer (Minimal) */}
       <footer className="bg-white border-t border-slate-200 mt-12 py-8 text-center text-slate-500 text-sm">
-        <p>© 2026 My Skill Shop. All rights reserved.</p>
+        <p>© 2026 MySkillStore. All rights reserved.</p>
       </footer>
 
     </div>

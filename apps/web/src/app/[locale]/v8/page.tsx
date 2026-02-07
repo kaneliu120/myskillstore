@@ -185,7 +185,7 @@ export default function HomePageV8() {
               <Boxes className="w-5 h-5" />
             </div>
             <Link href="/v8" className="text-xl font-bold tracking-tight text-slate-900">
-              My Skill Shop <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded ml-2">V8 Beta</span>
+              MySkillStore <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded ml-2">V8 Beta</span>
             </Link>
           </div>
 
@@ -402,10 +402,10 @@ export default function HomePageV8() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2 text-slate-900 font-bold text-lg">
               <div className="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white text-xs">M</div>
-              My Skill Shop <span className="text-xs font-normal text-slate-400 ml-2">V8 Design</span>
+              MySkillStore <span className="text-xs font-normal text-slate-400 ml-2">V8 Design</span>
             </div>
             <div className="text-slate-500 text-sm">
-              © 2026 My Skill Shop. All rights reserved.
+              © 2026 MySkillStore. All rights reserved.
             </div>
             <div className="flex gap-6 text-sm text-slate-500">
                <Link href="#" className="hover:text-indigo-600 transition">{isZh ? '条款' : 'Terms'}</Link>
