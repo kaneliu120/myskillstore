@@ -10,6 +10,7 @@ async function bootstrap() {
     const allowedOrigins = [
       'https://myskillstore-web.onrender.com',
       'https://myskillshop-web.onrender.com',
+      'https://skills-store-api-bjbddhaeathndkap.southeastasia-01.azurewebsites.net',
       'http://localhost:3000'
     ];
     const origin = req.headers.origin;
