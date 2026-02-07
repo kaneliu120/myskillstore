@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { 
-  Star, ShoppingCart, CheckCircle, ShieldCheck, Zap, 
+  Star, ShoppingCart, CheckCircle, Check, ShieldCheck, Zap, 
   Boxes, ChevronRight, User, Globe, Share2, Heart, ArrowLeft, Download, Eye
 } from "lucide-react";
 import api from '@/lib/api';
