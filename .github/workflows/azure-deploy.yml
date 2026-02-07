@@ -17,14 +17,20 @@ jobs:
       with:
         node-version: 20.x
 
-    - name: Prepare source for Azure
+    - name: Build Backend (API)
       run: |
-        mkdir deploy
-        # 复制后端产物和根目录配置
-        cp -r apps/api/dist/* deploy/
-        cp package.json deploy/
-        cp package-lock.json deploy/
-        cd deploy && zip -r ../release.zip .
+        npm ci
+        npm run build --workspace=apps/api
+
+    - name: Flatten Artifact for Azure
+      run: |
+        mkdir release
+        # 核心：将编译后的所有文件直接放在 release 根目录
+        cp -r apps/api/dist/* release/
+        cp package.json release/
+        cp package-lock.json release/
+        cp .deployment release/
+        cd release && zip -r ../release.zip .
 
     - name: Login to Azure
       uses: azure/login@v2
