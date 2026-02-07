@@ -68,14 +68,14 @@ export default function HomePage() {
 
   const faqs = isZh ? [
     { q: '我如何注册或登录？', a: '点击右上角的"登录/注册"按钮，使用邮箱注册新账户或登录现有账户。' },
-    { q: '我如何创建和发布我的技能文件？', a: '登录后，前往"发布技能"页面，填写技能信息、设置价格、上传文件即可提交审核。' },
-    { q: '平台如何收费？', a: '我们采用极低的平台服务费，让创作者获得最大收益。具体费率请查看卖家指南。' },
+    { q: '我如何创建和发布我的技能文件？', a: '登录后，前往"技能发布"页面，填写技能信息、设置价格、上传文件即可提交审核。' },
+    { q: '平台如何收费？', a: '我们采用极低的平台服务费，让创作者获得最大收益。具体费率请查看技能发布页。' },
     { q: '支持哪些支付方式？', a: '目前支持 USDT/USDC 等主流加密货币，买家直接支付到您的钱包地址。' },
     { q: '如何保护我的知识产权？', a: '平台采用区块链技术进行版权确权，智能合约保障交易安全。' },
   ] : [
     { q: 'How do I register or log in?', a: 'Click the "Login / Register" button in the top right corner to create a new account with your email or sign in to an existing account.' },
-    { q: 'How do I create and publish my skill?', a: 'After logging in, go to the "Seller Guide" page, fill in your skill details, set your price, upload your files, and submit for review.' },
-    { q: 'What are the platform fees?', a: 'We charge minimal platform fees to maximize creator earnings. Check the Seller Guide for specific rates.' },
+    { q: 'How do I create and publish my skill?', a: 'After logging in, go to the "Publish Skill" page, fill in your skill details, set your price, upload your files, and submit for review.' },
+    { q: 'What are the platform fees?', a: 'We charge minimal platform fees to maximize creator earnings. Check the Publish Skill page for specific rates.' },
     { q: 'What payment methods are supported?', a: 'We currently support major cryptocurrencies like USDT/USDC. Buyers pay directly to your wallet address.' },
     { q: 'How is my intellectual property protected?', a: 'The platform uses blockchain technology for copyright verification, with smart contracts ensuring secure transactions.' },
   ];
@@ -85,23 +85,31 @@ export default function HomePage() {
     { title: '科幻场景生成器', author: '王晓华', price: 129, category: '图像创作', color: 'bg-purple-100' },
     { title: '商业数据洞察', author: '张伟', price: 150, category: '数据分析', color: 'bg-blue-100' },
     { title: '多语种语音克隆', author: '陈静', price: 199, category: '语音合成', color: 'bg-pink-100' },
+    { title: 'Python 自动化脚本', author: '刘强', price: 89, category: '编程开发', color: 'bg-green-100' },
+    { title: 'AI 法律顾问 Prompt', author: '赵敏', price: 299, category: '法律咨询', color: 'bg-red-100' },
+    { title: '跨境电商选品模型', author: '孙浩', price: 199, category: '电商运营', color: 'bg-orange-100' },
+    { title: '虚拟人直播配置', author: '周杰', price: 350, category: '直播技术', color: 'bg-indigo-100' },
   ] : [
     { title: 'Smart Copywriting Assistant', author: 'Alex Chen', price: 99, category: 'Text Generation', color: 'bg-amber-100' },
     { title: 'Sci-Fi Scene Generator', author: 'Maria Wang', price: 129, category: 'Image Creation', color: 'bg-purple-100' },
     { title: 'Business Data Insights', author: 'James Liu', price: 150, category: 'Data Analysis', color: 'bg-blue-100' },
     { title: 'Multi-Language Voice Clone', author: 'Sarah Kim', price: 199, category: 'Voice Synthesis', color: 'bg-pink-100' },
+    { title: 'Python Automation Script', author: 'David Liu', price: 89, category: 'Development', color: 'bg-green-100' },
+    { title: 'AI Legal Advisor Prompt', author: 'Emily Zhao', price: 299, category: 'Legal', color: 'bg-red-100' },
+    { title: 'Cross-border E-commerce Model', author: 'Kevin Sun', price: 199, category: 'E-commerce', color: 'bg-orange-100' },
+    { title: 'Virtual Streamer Setup', author: 'Jay Zhou', price: 350, category: 'Live Streaming', color: 'bg-indigo-100' },
   ];
 
   const steps = isZh ? [
-    { icon: Wallet, num: '01', title: '身份激活', desc: '连接数字身份，安全解锁您的AI技能商店，开启创作者之旅。' },
-    { icon: Brain, num: '02', title: '封装智慧', desc: '将您的独特技能与知识转化为可交易的AI模型或服务，一键打包。' },
-    { icon: Globe, num: '03', title: '确权上架', desc: '利用区块链技术确保知识产权，智能合约保障交易，一键上架全球市场。' },
-    { icon: TrendingUp, num: '04', title: '建立品牌', desc: '持续提供优质服务，积累好评，打造个人AI品牌，实现长期收益增值。' },
+    { icon: Wallet, num: '01', title: '创建账户', desc: '注册您的账户，开启智慧创造者之旅' },
+    { icon: Brain, num: '02', title: '封装智慧', desc: '将你的天赋与知识技能转化为AI 智能体可使用的技能功能' },
+    { icon: Globe, num: '03', title: '轻松发布', desc: '利用平台的功能，轻松将您的技能知识产权，发布到全球市场' },
+    { icon: TrendingUp, num: '04', title: '建立品牌', desc: '随着您的客户规模的成长，让您的知识产权为您带来长期且稳定的被动收入。' },
   ] : [
-    { icon: Wallet, num: '01', title: 'Activate Identity', desc: 'Connect your digital identity, securely unlock your AI skill shop, and begin your creator journey.' },
-    { icon: Brain, num: '02', title: 'Package Wisdom', desc: 'Transform your unique skills and knowledge into tradable AI models or services with one click.' },
-    { icon: Globe, num: '03', title: 'Verify & List', desc: 'Use blockchain technology to protect IP rights, smart contracts ensure secure transactions, list globally.' },
-    { icon: TrendingUp, num: '04', title: 'Build Your Brand', desc: 'Deliver quality services, accumulate reviews, build your personal AI brand for long-term growth.' },
+    { icon: Wallet, num: '01', title: 'Create Account', desc: 'Register your account and start your journey as a wisdom creator.' },
+    { icon: Brain, num: '02', title: 'Package Wisdom', desc: 'Transform your talents and knowledge into functional skills usable by AI agents.' },
+    { icon: Globe, num: '03', title: 'Easy Publish', desc: 'Use platform features to easily publish your intellectual property to the global market.' },
+    { icon: TrendingUp, num: '04', title: 'Build Your Brand', desc: 'As your client base grows, let your intellectual property bring you long-term, stable passive income.' },
   ];
 
   return (
@@ -159,7 +167,7 @@ export default function HomePage() {
               {isZh ? '技能探索' : 'Explore'}
             </Link>
             <Link href="/products/create" className="hover:text-purple-600 transition">
-              {isZh ? '卖家指南' : 'Seller Guide'}
+              {isZh ? '技能发布' : 'Publish Skill'}
             </Link>
             <Link href="#faq" className="hover:text-purple-600 transition">
               {isZh ? '常见问题' : 'FAQ'}
@@ -198,7 +206,7 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left: Text */}
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-gray-900">
+              <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6 text-gray-900">
                 {t('hero.title')}
               </h1>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
@@ -208,7 +216,7 @@ export default function HomePage() {
               <div className="flex gap-4">
                 <Link href="/products/create">
                   <Button className="h-12 bg-purple-600 hover:bg-purple-700 text-white rounded-full px-8 text-base font-medium shadow-lg shadow-purple-200">
-                    {isZh ? '开始销售' : 'Start Selling'}
+                    {isZh ? '技能发布' : 'Publish Skill'}
                   </Button>
                 </Link>
                 <Link href="#explore">
@@ -285,9 +293,9 @@ export default function HomePage() {
               <h3 className="text-xl font-bold text-center mb-4 text-gray-900">{t('hero.tag1_title')}</h3>
               <p className="text-gray-600 text-center leading-relaxed">
                 {isZh ? (
-                  <>无缝集成<span className="text-purple-600 font-medium">全球主流AI代理平台</span>。支持<span className="text-purple-600 font-medium">OpenAI</span>，<span className="text-purple-600 font-medium">Hugging Face</span>，及其它领先框架的<span className="text-purple-600 font-medium">标准化API调用</span>。确保您的AI技能在任何环境中都能即插即用，无需额外适配，最大化跨平台兼容性。</>
+                  <>作为<span className="text-purple-600 font-medium">商业技能平台</span>的标准，这里可以获得<span className="text-purple-600 font-medium">各类AI智能体</span>所需的<span className="text-purple-600 font-medium">各领域技能</span>。</>
                 ) : (
-                  <>Seamlessly integrates with <span className="text-purple-600 font-medium">major global AI agent platforms</span>. Supports <span className="text-purple-600 font-medium">OpenAI</span>, <span className="text-purple-600 font-medium">Hugging Face</span>, and other leading frameworks with <span className="text-purple-600 font-medium">standardized API calls</span>. Your AI skills work plug-and-play in any environment, maximizing cross-platform compatibility.</>
+                  <>As the standard for <span className="text-purple-600 font-medium">commercial skill platforms</span>, access skills across <span className="text-purple-600 font-medium">all domains</span> required by <span className="text-purple-600 font-medium">various AI agents</span>.</>
                 )}
               </p>
             </div>
@@ -300,9 +308,9 @@ export default function HomePage() {
               <h3 className="text-xl font-bold text-center mb-4 text-gray-900">{t('hero.tag2_title')}</h3>
               <p className="text-gray-600 text-center leading-relaxed">
                 {isZh ? (
-                  <>为创作者和开发者提供极具竞争力的<span className="text-purple-600 font-medium">费率结构</span>。享受接近<span className="text-purple-600 font-medium">零</span>的<span className="text-purple-600 font-medium">平台服务费</span>和低至行<span className="text-purple-600 font-medium">业最低</span>的<span className="text-purple-600 font-medium">支付网关费用</span>。最大化您的收益，让每一分价值都回归创作本身。</>
+                  <>为了<span className="text-purple-600 font-medium">AI科技</span>与<span className="text-purple-600 font-medium">人类共赢</span>，我们将努力将<span className="text-purple-600 font-medium">交易成本</span>做到<span className="text-purple-600 font-medium">最低</span>。</>
                 ) : (
-                  <>Offering creators and developers highly competitive <span className="text-purple-600 font-medium">fee structures</span>. Enjoy near-<span className="text-purple-600 font-medium">zero platform fees</span> and <span className="text-purple-600 font-medium">industry-lowest</span> <span className="text-purple-600 font-medium">payment gateway costs</span>. Maximize your earnings—every dollar of value returns to you.</>
+                  <>For the mutual benefit of <span className="text-purple-600 font-medium">AI technology</span> and <span className="text-purple-600 font-medium">humanity</span>, we strive to keep <span className="text-purple-600 font-medium">transaction costs</span> to the <span className="text-purple-600 font-medium">absolute minimum</span>.</>
                 )}
               </p>
             </div>
@@ -481,7 +489,7 @@ export default function HomePage() {
               <h4 className="font-bold text-white mb-4">{isZh ? '产品' : 'Product'}</h4>
               <div className="space-y-2 text-sm">
                 <Link href="/products" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '技能探索' : 'Explore Skills'}</Link>
-                <Link href="/products/create" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '发布技能' : 'Publish Skill'}</Link>
+                <Link href="/products/create" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '技能发布' : 'Publish Skill'}</Link>
               </div>
             </div>
             

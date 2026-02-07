@@ -7,7 +7,7 @@ import ProductCard from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import { Boxes, Search, User, ChevronDown, Check, Brain, Filter } from 'lucide-react';
+import { Boxes, Search, User, Brain } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -69,6 +69,8 @@ export default function ProductsPage() {
     { title: '多语种语音克隆', author: '陈静', price: 199, category: '语音合成' },
     { title: 'SEO优化写作助手', author: '刘洋', price: 79, category: '文本生成' },
     { title: '代码审查AI', author: '周明', price: 249, category: '代码' },
+    { title: '跨境电商选品模型', author: '孙浩', price: 199, category: '电商运营' },
+    { title: '虚拟人直播配置', author: '周杰', price: 350, category: '直播技术' },
   ] : [
     { title: 'Smart Copywriting Assistant', author: 'Alex Chen', price: 99, category: 'Text Generation' },
     { title: 'Sci-Fi Scene Generator', author: 'Maria Wang', price: 129, category: 'Image Creation' },
@@ -76,6 +78,8 @@ export default function ProductsPage() {
     { title: 'Multi-Language Voice Clone', author: 'Sarah Kim', price: 199, category: 'Voice Synthesis' },
     { title: 'SEO Writing Assistant', author: 'David Yang', price: 79, category: 'Text Generation' },
     { title: 'Code Review AI', author: 'Mike Zhou', price: 249, category: 'Code' },
+    { title: 'Cross-border E-commerce Model', author: 'Kevin Sun', price: 199, category: 'E-commerce' },
+    { title: 'Virtual Streamer Setup', author: 'Jay Zhou', price: 350, category: 'Live Streaming' },
   ];
 
   return (
@@ -95,7 +99,7 @@ export default function ProductsPage() {
           <div className="hidden md:flex items-center gap-8 text-sm text-gray-600">
             <Link href="/" className="hover:text-purple-600 transition">{isZh ? '首页' : 'Home'}</Link>
             <Link href="/products" className="text-purple-600 font-medium">{isZh ? '技能探索' : 'Explore'}</Link>
-            <Link href="/products/create" className="hover:text-purple-600 transition">{isZh ? '卖家指南' : 'Seller Guide'}</Link>
+            <Link href="/products/create" className="hover:text-purple-600 transition">{isZh ? '技能发布' : 'Publish Skill'}</Link>
           </div>
           
           <div className="flex items-center gap-4">
@@ -112,7 +116,7 @@ export default function ProductsPage() {
         <div className="container mx-auto max-w-6xl">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
               {isZh ? '探索AI技能' : 'Explore AI Skills'}
             </h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -133,7 +137,7 @@ export default function ProductsPage() {
             </div>
             <Link href="/products/create">
               <Button className="h-12 bg-purple-600 hover:bg-purple-700 text-white rounded-xl px-6">
-                {isZh ? '发布技能' : 'List a Skill'}
+                {isZh ? '技能发布' : 'Publish Skill'}
               </Button>
             </Link>
           </div>
@@ -161,7 +165,7 @@ export default function ProductsPage() {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
             </div>
           ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard 
                   key={product.id} 
@@ -175,7 +179,7 @@ export default function ProductsPage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {demoProducts.map((demo, idx) => (
                 <div key={idx} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition group">
                   <div className="relative">
