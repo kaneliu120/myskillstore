@@ -16,24 +16,15 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 20.x
-        cache: 'npm'
 
-    - name: Install Dependencies
-      run: npm ci
-
-    - name: Build API
-      run: npm run build --workspace=apps/api
-
-    - name: Prepare Deployment Package
+    - name: Prepare source for Azure
       run: |
         mkdir deploy
+        # 复制后端产物和根目录配置
         cp -r apps/api/dist/* deploy/
         cp package.json deploy/
         cp package-lock.json deploy/
-        # Create a production node_modules inside deploy
-        cd deploy
-        npm install --omit=dev --ignore-scripts
-        zip -r ../release.zip .
+        cd deploy && zip -r ../release.zip .
 
     - name: Login to Azure
       uses: azure/login@v2
