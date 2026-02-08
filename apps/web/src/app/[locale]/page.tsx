@@ -2,12 +2,15 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Boxes, DollarSign, Wallet, Brain, Globe, TrendingUp, Search, User, ChevronDown, Check, Plus, Minus } from 'lucide-react';
+import { Wallet, Brain, Globe, TrendingUp, Minus, Plus } from 'lucide-react';
 import ProductCard from '@/components/product/ProductCard';
-import { Input } from '@/components/ui/input';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import api from '@/lib/api';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
+import { AuthModal } from '@/components/auth/AuthModal';
 
 interface Product {
   id: number;
@@ -20,18 +23,19 @@ interface Product {
 export default function HomePage() {
   const t = useTranslations('HomePage');
   const locale = useLocale();
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
-  const [search, setSearch] = useState('');
-  const [langOpen, setLangOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const langRef = useRef<HTMLDivElement>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  // Mock login state - replace with real auth context later
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const isZh = locale === 'zh';
 
   const fetchProducts = async (searchQuery = '') => {
     try {
       const response = await api.get('/products', {
-        params: { status: 'approved', search: searchQuery }
+        params: { search: searchQuery }
       });
       setProducts(response.data);
     } catch (error) {
@@ -43,28 +47,13 @@ export default function HomePage() {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (langRef.current && !langRef.current.contains(event.target as Node)) {
-        setLangOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      fetchProducts(search);
+  const handlePublishClick = (e: React.MouseEvent) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      setIsAuthModalOpen(true);
     }
+    // If logged in, let the Link proceed naturally
   };
-
-  const languages = [
-    { code: 'en', label: 'English', flag: '🇺🇸' },
-    { code: 'zh', label: '中文', flag: '🇨🇳' },
-  ];
-
-  const currentLang = languages.find(l => l.code === locale) || languages[0];
 
   const faqs = isZh ? [
     { q: '我如何注册或登录？', a: '点击右上角的"登录/注册"按钮，使用邮箱注册新账户或登录现有账户。' },
@@ -81,23 +70,23 @@ export default function HomePage() {
   ];
 
   const demoProducts = isZh ? [
-    { title: '智能文案撰写助手', author: '李明', price: 99, category: '文本生成', color: 'bg-amber-100' },
-    { title: '科幻场景生成器', author: '王晓华', price: 129, category: '图像创作', color: 'bg-purple-100' },
-    { title: '商业数据洞察', author: '张伟', price: 150, category: '数据分析', color: 'bg-blue-100' },
-    { title: '多语种语音克隆', author: '陈静', price: 199, category: '语音合成', color: 'bg-pink-100' },
-    { title: 'Python 自动化脚本', author: '刘强', price: 89, category: '编程开发', color: 'bg-green-100' },
-    { title: 'AI 法律顾问 Prompt', author: '赵敏', price: 299, category: '法律咨询', color: 'bg-red-100' },
-    { title: '跨境电商选品模型', author: '孙浩', price: 199, category: '电商运营', color: 'bg-orange-100' },
-    { title: '虚拟人直播配置', author: '周杰', price: 350, category: '直播技术', color: 'bg-indigo-100' },
+    { id: 'd1', title: '智能文案撰写助手', author: '李明', price: 99, category: '文本生成', color: 'bg-amber-100' },
+    { id: 'd2', title: '科幻场景生成器', author: '王晓华', price: 129, category: '图像创作', color: 'bg-purple-100' },
+    { id: 'd3', title: '商业数据洞察', author: '张伟', price: 150, category: '数据分析', color: 'bg-blue-100' },
+    { id: 'd4', title: '多语种语音克隆', author: '陈静', price: 199, category: '语音合成', color: 'bg-pink-100' },
+    { id: 'd5', title: 'Python 自动化脚本', author: '刘强', price: 89, category: '编程开发', color: 'bg-green-100' },
+    { id: 'd6', title: 'AI 法律顾问 Prompt', author: '赵敏', price: 299, category: '法律咨询', color: 'bg-red-100' },
+    { id: 'd7', title: '跨境电商选品模型', author: '孙浩', price: 199, category: '电商运营', color: 'bg-orange-100' },
+    { id: 'd8', title: '虚拟人直播配置', author: '周杰', price: 350, category: '直播技术', color: 'bg-indigo-100' },
   ] : [
-    { title: 'Smart Copywriting Assistant', author: 'Alex Chen', price: 99, category: 'Text Generation', color: 'bg-amber-100' },
-    { title: 'Sci-Fi Scene Generator', author: 'Maria Wang', price: 129, category: 'Image Creation', color: 'bg-purple-100' },
-    { title: 'Business Data Insights', author: 'James Liu', price: 150, category: 'Data Analysis', color: 'bg-blue-100' },
-    { title: 'Multi-Language Voice Clone', author: 'Sarah Kim', price: 199, category: 'Voice Synthesis', color: 'bg-pink-100' },
-    { title: 'Python Automation Script', author: 'David Liu', price: 89, category: 'Development', color: 'bg-green-100' },
-    { title: 'AI Legal Advisor Prompt', author: 'Emily Zhao', price: 299, category: 'Legal', color: 'bg-red-100' },
-    { title: 'Cross-border E-commerce Model', author: 'Kevin Sun', price: 199, category: 'E-commerce', color: 'bg-orange-100' },
-    { title: 'Virtual Streamer Setup', author: 'Jay Zhou', price: 350, category: 'Live Streaming', color: 'bg-indigo-100' },
+    { id: 'd1', title: 'Smart Copywriting Assistant', author: 'Alex Chen', price: 99, category: 'Text Generation', color: 'bg-amber-100' },
+    { id: 'd2', title: 'Sci-Fi Scene Generator', author: 'Maria Wang', price: 129, category: 'Image Creation', color: 'bg-purple-100' },
+    { id: 'd3', title: 'Business Data Insights', author: 'James Liu', price: 150, category: 'Data Analysis', color: 'bg-blue-100' },
+    { id: 'd4', title: 'Multi-Language Voice Clone', author: 'Sarah Kim', price: 199, category: 'Voice Synthesis', color: 'bg-pink-100' },
+    { id: 'd5', title: 'Python Automation Script', author: 'David Liu', price: 89, category: 'Development', color: 'bg-green-100' },
+    { id: 'd6', title: 'AI Legal Advisor Prompt', author: 'Emily Zhao', price: 299, category: 'Legal', color: 'bg-red-100' },
+    { id: 'd7', title: 'Cross-border E-commerce Model', author: 'Kevin Sun', price: 199, category: 'E-commerce', color: 'bg-orange-100' },
+    { id: 'd8', title: 'Virtual Streamer Setup', author: 'Jay Zhou', price: 350, category: 'Live Streaming', color: 'bg-indigo-100' },
   ];
 
   const steps = isZh ? [
@@ -114,163 +103,105 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-      {/* Navbar */}
-      <nav className="bg-white border-b border-gray-200 fixed w-full z-50">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Left: Brand + Language Dropdown */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                <Boxes className="w-5 h-5 text-white" />
-              </div>
-              <Link href="/" className="text-lg font-bold text-gray-900">
-                {t('nav.brand')}
-              </Link>
-            </div>
-            
-            {/* Language Dropdown */}
-            <div className="relative" ref={langRef}>
-              <button
-                onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
-              >
-                <span>{currentLang.flag}</span>
-                <span className="hidden sm:inline">{currentLang.label}</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${langOpen ? 'rotate-180' : ''}`} />
-              </button>
-              
-              {langOpen && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[140px]">
-                  {languages.map(lang => (
-                    <Link
-                      key={lang.code}
-                      href={`/${lang.code}`}
-                      className={`flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 ${locale === lang.code ? 'text-purple-600 bg-purple-50' : 'text-gray-700'}`}
-                      onClick={() => setLangOpen(false)}
-                    >
-                      <span>{lang.flag}</span>
-                      <span>{lang.label}</span>
-                      {locale === lang.code && <Check className="w-4 h-4 ml-auto" />}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          
-          {/* Center: Nav Links */}
-          <div className="hidden md:flex items-center gap-8 text-sm text-gray-600">
-            <Link href="/" className="text-purple-600 font-medium border-b-2 border-purple-600 pb-5 -mb-5">
-              {isZh ? '首页' : 'Home'}
-            </Link>
-            <Link href="/products" className="hover:text-purple-600 transition">
-              {isZh ? '技能探索' : 'Explore'}
-            </Link>
-            <Link href="/products/create" className="hover:text-purple-600 transition">
-              {isZh ? '技能发布' : 'Publish Skill'}
-            </Link>
-            <Link href="#faq" className="hover:text-purple-600 transition">
-              {isZh ? '常见问题' : 'FAQ'}
-            </Link>
-          </div>
-          
-          {/* Right: Search + Login */}
-          <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center relative">
-              <Search className="absolute left-3 w-4 h-4 text-gray-400" />
-              <Input 
-                placeholder={isZh ? '搜索技能...' : 'Search skills...'} 
-                className="pl-9 bg-gray-100 border-gray-200 focus-visible:ring-purple-500 rounded-lg h-10 w-64 text-sm"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={handleSearch}
-              />
-            </div>
-            <Link href="/user">
-              <Button variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg h-10 px-4 text-sm">
-                {isZh ? '登录 / 注册' : 'Login / Register'}
-              </Button>
-            </Link>
-            <Link href="/user">
-              <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-gray-500" />
-              </div>
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar 
+        onSearch={fetchProducts} 
+        onPublishClick={handlePublishClick}
+        isLoggedIn={isLoggedIn}
+      />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-white via-gray-50 to-purple-50/30">
+      <section className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 text-white overflow-hidden">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left: Text */}
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6 text-gray-900">
+            <div className="text-center lg:text-left">
+              <div className="inline-block px-4 py-1.5 mb-6 text-sm font-medium bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-200">
+                ✨ V7 New Experience
+              </div>
+              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-6">
                 {t('hero.title')}
               </h1>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg md:text-xl text-purple-100/80 mb-8 leading-relaxed">
                 {t('hero.subtitle')}
               </p>
               
-              <div className="flex gap-4">
-                <Link href="/products/create">
-                  <Button className="h-12 bg-purple-600 hover:bg-purple-700 text-white rounded-full px-8 text-base font-medium shadow-lg shadow-purple-200">
-                    {isZh ? '技能发布' : 'Publish Skill'}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link 
+                  href="/products/create" 
+                  className="w-full sm:w-auto"
+                  onClick={handlePublishClick}
+                >
+                  <Button className="w-full sm:w-auto h-12 md:h-14 bg-white hover:bg-purple-50 text-purple-900 rounded-xl px-10 text-lg font-bold shadow-xl transition-all hover:scale-105 active:scale-95">
+                    {isZh ? '立即发布' : 'Get Started'}
                   </Button>
                 </Link>
-                <Link href="#explore">
-                  <Button variant="outline" className="h-12 border-2 border-purple-200 text-purple-600 hover:bg-purple-50 rounded-full px-8 text-base font-medium">
-                    {isZh ? '探索技能' : 'Explore Skills'}
+                <Link href="#explore" className="w-full sm:w-auto">
+                  <Button variant="outline" className="w-full sm:w-auto h-12 md:h-14 border-2 border-purple-400/50 text-white hover:bg-white/10 rounded-xl px-10 text-lg font-bold backdrop-blur-sm">
+                    {isZh ? '浏览市场' : 'Marketplace'}
                   </Button>
                 </Link>
               </div>
+              
+              <div className="mt-8 md:mt-12 flex items-center justify-center lg:justify-start gap-6">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="w-10 h-10 rounded-full border-2 border-purple-800 bg-purple-700 flex items-center justify-center text-xs overflow-hidden">
+                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="avatar" />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-purple-200/60">
+                  <span className="text-white font-bold">1,000+</span> {isZh ? '位创作者已加入' : 'creators already joined'}
+                </p>
+              </div>
             </div>
             
-            {/* Right: Laptop Mockup */}
-            <div className="relative">
-              <div className="bg-gradient-to-br from-purple-100/50 to-blue-100/50 rounded-3xl p-8">
-                <div className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
-                  {/* Browser Chrome */}
-                  <div className="bg-gray-800 px-4 py-3 flex items-center gap-2">
+            {/* Right: Modern Dashboard Mockup */}
+            <div className="relative group mt-8 lg:mt-0 w-full max-w-lg mx-auto lg:max-w-none">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+              <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-4 md:p-6 shadow-2xl">
+                <div className="bg-[#0f0f1b] rounded-2xl overflow-hidden shadow-inner border border-white/5">
+                  {/* Mock Browser Header */}
+                  <div className="bg-white/5 px-4 py-3 flex items-center justify-between">
                     <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
                     </div>
-                    <div className="flex-1 ml-4">
-                      <div className="bg-gray-700 rounded-md px-3 py-1 text-xs text-gray-400 max-w-xs">
-                        myskillstore.dev
-                      </div>
+                    <div className="px-3 py-1 bg-white/5 rounded-md text-[10px] text-white/40 font-mono">
+                      v7.skillstore.app
                     </div>
+                    <div className="w-6"></div>
                   </div>
-                  {/* Dashboard Preview */}
-                  <div className="bg-gray-900 p-4 min-h-[200px]">
-                    <div className="grid grid-cols-3 gap-3 mb-4">
-                      <div className="bg-purple-600/20 rounded-lg p-3">
-                        <div className="text-purple-400 text-xs mb-1">{isZh ? '总收益' : 'Revenue'}</div>
-                        <div className="text-white font-bold">$52,598</div>
+                  
+                  {/* Dashboard Content */}
+                  <div className="p-5 space-y-6">
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <div className="text-purple-300/50 text-xs mb-1">Total Balance</div>
+                        <div className="text-2xl font-bold">$12,482.00</div>
                       </div>
-                      <div className="bg-blue-600/20 rounded-lg p-3">
-                        <div className="text-blue-400 text-xs mb-1">{isZh ? '订单数' : 'Orders'}</div>
-                        <div className="text-white font-bold">36</div>
-                      </div>
-                      <div className="bg-emerald-600/20 rounded-lg p-3">
-                        <div className="text-emerald-400 text-xs mb-1">{isZh ? '技能数' : 'Skills'}</div>
-                        <div className="text-white font-bold">62</div>
+                      <div className="h-12 w-24 flex items-end gap-1">
+                        {[40, 70, 45, 90, 65, 80, 50].map((h, i) => (
+                          <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-purple-500/40 rounded-t-sm"></div>
+                        ))}
                       </div>
                     </div>
-                    <div className="bg-gray-800 rounded-lg p-3">
-                      <div className="text-gray-400 text-xs mb-2">{isZh ? '我的技能' : 'My Skills'}</div>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-white">{isZh ? '智能文案撰写助手' : 'Smart Copywriting Assistant'}</span>
-                          <span className="text-purple-400">$99</span>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+                        <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mb-3">
+                          <TrendingUp className="w-4 h-4 text-purple-400" />
                         </div>
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-white">{isZh ? '科幻场景生成器' : 'Sci-Fi Scene Generator'}</span>
-                          <span className="text-purple-400">$129</span>
+                        <div className="text-xs text-white/40">Growth</div>
+                        <div className="text-sm font-bold text-green-400">+24.5%</div>
+                      </div>
+                      <div className="bg-white/5 rounded-xl p-4 border border-white/5">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center mb-3">
+                          <Globe className="w-4 h-4 text-indigo-400" />
                         </div>
+                        <div className="text-xs text-white/40">Global Reach</div>
+                        <div className="text-sm font-bold text-indigo-400">142 Countries</div>
                       </div>
                     </div>
                   </div>
@@ -281,57 +212,46 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-6 bg-gray-100/50">
-        <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <div className="w-24 h-24 mx-auto mb-6 bg-purple-50 rounded-2xl flex items-center justify-center">
-                <Boxes className="w-12 h-12 text-purple-500" />
-              </div>
-              <h3 className="text-xl font-bold text-center mb-4 text-gray-900">{t('hero.tag1_title')}</h3>
-              <p className="text-gray-600 text-center leading-relaxed">
-                {isZh ? (
-                  <>作为<span className="text-purple-600 font-medium">商业技能平台</span>的标准，这里可以获得<span className="text-purple-600 font-medium">各类AI智能体</span>所需的<span className="text-purple-600 font-medium">各领域技能</span>。</>
-                ) : (
-                  <>As the standard for <span className="text-purple-600 font-medium">commercial skill platforms</span>, access skills across <span className="text-purple-600 font-medium">all domains</span> required by <span className="text-purple-600 font-medium">various AI agents</span>.</>
-                )}
-              </p>
-            </div>
-            
-            {/* Feature 2 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <div className="w-24 h-24 mx-auto mb-6 bg-purple-50 rounded-2xl flex items-center justify-center">
-                <DollarSign className="w-12 h-12 text-purple-500" />
-              </div>
-              <h3 className="text-xl font-bold text-center mb-4 text-gray-900">{t('hero.tag2_title')}</h3>
-              <p className="text-gray-600 text-center leading-relaxed">
-                {isZh ? (
-                  <>为了<span className="text-purple-600 font-medium">AI科技</span>与<span className="text-purple-600 font-medium">人类共赢</span>，我们将努力将<span className="text-purple-600 font-medium">交易成本</span>做到<span className="text-purple-600 font-medium">最低</span>。</>
-                ) : (
-                  <>For the mutual benefit of <span className="text-purple-600 font-medium">AI technology</span> and <span className="text-purple-600 font-medium">humanity</span>, we strive to keep <span className="text-purple-600 font-medium">transaction costs</span> to the <span className="text-purple-600 font-medium">absolute minimum</span>.</>
-                )}
-              </p>
-            </div>
-          </div>
-          
-          {/* Scroll Indicator */}
-          <div className="text-center mt-12">
-            <div className="text-purple-500 text-sm font-medium mb-2">SCROLL</div>
-            <ChevronDown className="w-6 h-6 text-purple-500 mx-auto animate-bounce" />
+      {/* Categories / Tabs */}
+      <section className="py-12 px-6 bg-white border-b border-gray-100">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex items-center gap-4 overflow-x-auto pb-4 no-scrollbar">
+            {['All Skills', 'AI Agents', 'Prompts', 'Automation', 'Voice', 'Image', 'Data', 'Coding'].map((cat, i) => (
+              <button 
+                key={i}
+                className={`px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all
+                  ${i === 0 
+                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-100' 
+                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-purple-600'
+                  }`}
+              >
+                {isZh ? (cat === 'All Skills' ? '全部' : cat) : cat}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Latest Arrivals */}
-      <section id="explore" className="py-20 px-6 bg-white">
+      <section id="explore" className="py-20 px-6 bg-gray-50">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold text-center mb-12 text-purple-600">
-            {isZh ? '最新上架' : 'Latest Arrivals'}
-          </h2>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                {isZh ? '探索优质技能' : 'Explore Skills'}
+              </h2>
+              <p className="text-gray-500 max-w-lg">
+                {isZh ? '发现来自全球顶级创作者的 AI 技能和数字资产。' : 'Discover top-tier AI skills and digital assets from creators worldwide.'}
+              </p>
+            </div>
+            <Link href="/products">
+              <Button variant="link" className="text-purple-600 font-bold p-0 flex items-center gap-2">
+                {isZh ? '查看全部技能' : 'View all skills'} <span>→</span>
+              </Button>
+            </Link>
+          </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {products.length > 0 ? (
               products.slice(0, 8).map(product => (
                 <ProductCard 
@@ -347,26 +267,14 @@ export default function HomePage() {
               /* Demo Cards when no products */
               <>
                 {demoProducts.map((demo, idx) => (
-                  <div key={idx} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition group">
-                    <div className="relative">
-                      <span className="absolute top-3 left-3 bg-purple-600 text-white text-xs px-3 py-1 rounded-full">
-                        {demo.category}
-                      </span>
-                      <div className={`h-40 ${demo.color} flex items-center justify-center`}>
-                        <Brain className="w-16 h-16 text-purple-300" />
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-900 mb-1 group-hover:text-purple-600 transition">{demo.title}</h3>
-                      <p className="text-sm text-gray-500 mb-3">{isZh ? '创作者：' : 'By '}{demo.author}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold text-purple-600">${demo.price}.00</span>
-                        <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white rounded-full text-xs px-4">
-                          {isZh ? '查看详情' : 'View'}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+                  <ProductCard 
+                    key={idx} 
+                    id={demo.id}
+                    title={demo.title}
+                    price={demo.price}
+                    author={demo.author}
+                    category={demo.category}
+                  />
                 ))}
               </>
             )}
@@ -383,39 +291,33 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-24 px-6 bg-gray-100">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">
-            {isZh ? '如何开始' : 'How It Works'}
-          </h2>
-          <div className="w-16 h-1 bg-purple-600 mx-auto mb-20"></div>
+      <section className="py-24 px-6 bg-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-100 to-transparent"></div>
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl font-black text-gray-900 mb-4">
+              {isZh ? '开启您的智慧之旅' : 'Start Your Journey'}
+            </h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">
+              {isZh ? '简单四步，将您的知识转化为持续的数字收益。' : 'Four simple steps to transform your knowledge into sustainable digital revenue.'}
+            </p>
+          </div>
           
-          {/* Steps Row */}
-          <div className="flex flex-col md:flex-row items-start justify-between gap-8 md:gap-2">
+          <div className="grid md:grid-cols-4 gap-12 relative">
+            {/* Connection Line (Hidden on mobile) */}
+            <div className="hidden md:block absolute top-12 left-1/4 right-1/4 h-0.5 border-t-2 border-dashed border-purple-100 -z-0"></div>
+            
             {steps.map((step, idx) => (
-              <div key={idx} className="flex items-center flex-1">
-                {/* Step Card */}
-                <div className="flex flex-col items-center text-center w-full max-w-[280px] mx-auto">
-                  {/* Icon Circle */}
-                  <div className="w-[140px] h-[140px] bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-xl shadow-purple-200 mb-8">
-                    <step.icon className="w-16 h-16 text-white" strokeWidth={1.5} />
+              <div key={idx} className="flex flex-col items-center text-center relative z-10 group">
+                <div className="w-24 h-24 bg-white border-2 border-purple-100 rounded-3xl flex items-center justify-center shadow-sm group-hover:border-purple-500 group-hover:shadow-xl group-hover:shadow-purple-200 group-hover:-translate-y-2 transition-all duration-500 mb-8 rotate-3 group-hover:rotate-0">
+                  <step.icon className="w-10 h-10 text-purple-600" strokeWidth={1.5} />
+                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold border-4 border-white">
+                    {step.num}
                   </div>
-                  
-                  {/* Title */}
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                  
-                  {/* Description - 完整显示 */}
-                  <p className="text-sm text-gray-500 leading-6">{step.desc}</p>
                 </div>
                 
-                {/* Arrow Connector */}
-                {idx < 3 && (
-                  <div className="hidden md:flex items-center justify-center w-8 -mt-24 flex-shrink-0">
-                    <svg width="24" height="12" viewBox="0 0 24 12" fill="none" className="text-purple-300">
-                      <path d="M0 6H20M20 6L15 1M20 6L15 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                )}
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                <p className="text-sm text-gray-500 leading-6 px-4">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -460,67 +362,24 @@ export default function HomePage() {
             <p className="text-gray-500 mb-4">
               {isZh ? '还有其他问题？' : 'Still have questions?'}
             </p>
-            <Button variant="outline" className="border-purple-300 text-purple-600 hover:bg-purple-50 rounded-full px-8">
-              {isZh ? '联系我们' : 'Contact Us'}
-            </Button>
+            <Link href="/contact">
+              <Button variant="outline" className="border-purple-300 text-purple-600 hover:bg-purple-50 rounded-full px-8">
+                {isZh ? '联系我们' : 'Contact Us'}
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Footer - Dark Space Gray */}
-      <footer className="py-16 bg-[#1a1a2e] text-white">
-        <div className="container mx-auto px-6 max-w-5xl">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            {/* Brand */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                  <Boxes className="w-5 h-5 text-white" />
-                </div>
-                <span className="font-bold text-white">{t('nav.brand')}</span>
-              </div>
-              <p className="text-sm text-gray-400">
-                {isZh ? 'AI驱动的专业技能变现平台' : 'AI-powered professional skill monetization platform'}
-              </p>
-            </div>
-            
-            {/* Links */}
-            <div>
-              <h4 className="font-bold text-white mb-4">{isZh ? '产品' : 'Product'}</h4>
-              <div className="space-y-2 text-sm">
-                <Link href="/products" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '技能探索' : 'Explore Skills'}</Link>
-                <Link href="/products/create" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '技能发布' : 'Publish Skill'}</Link>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-bold text-white mb-4">{isZh ? '资源' : 'Resources'}</h4>
-              <div className="space-y-2 text-sm">
-                <Link href="#faq" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '帮助中心' : 'Help Center'}</Link>
-                <Link href="#" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '开发者文档' : 'Developer Docs'}</Link>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-bold text-white mb-4">{isZh ? '关于' : 'About'}</h4>
-              <div className="space-y-2 text-sm">
-                <Link href="#" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '关于我们' : 'About Us'}</Link>
-                <Link href="#" className="block text-gray-400 hover:text-purple-400 transition">{isZh ? '联系我们' : 'Contact'}</Link>
-              </div>
-            </div>
-          </div>
-          
-          <div className="pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-gray-500 text-sm">
-              © 2026 MySkillStore. All rights reserved.
-            </div>
-            <div className="flex gap-4 text-sm">
-              <Link href="/en" className={`${locale === 'en' ? 'text-purple-400' : 'text-gray-500'} hover:text-purple-400 transition`}>English</Link>
-              <Link href="/zh" className={`${locale === 'zh' ? 'text-purple-400' : 'text-gray-500'} hover:text-purple-400 transition`}>中文</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+        onSuccess={() => {
+          setIsLoggedIn(true);
+          router.push('/products/create');
+        }}
+      />
     </div>
   );
 }

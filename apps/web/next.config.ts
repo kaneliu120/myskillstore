@@ -12,8 +12,8 @@ const nextConfig: NextConfig = {
     },
   },
   async rewrites() {
-    // ⚠️ 终极方案：由于 Render 环境变量注入不稳定，直接硬编码后端地址
-    const apiUrl = process.env.SERVER_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://my-skill-api-kane.onrender.com';
+    // ⚠️ 终极方案：对接 Azure API
+    const apiUrl = 'https://skills-store-api-bjbddhaeathndkap.southeastasia-01.azurewebsites.net';
     
     console.log(`[Next.js Rewrite] Configuring proxy to: ${apiUrl}`);
 
