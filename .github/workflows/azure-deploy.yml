@@ -28,8 +28,6 @@ jobs:
         file: api.Dockerfile
         push: true
         tags: ${{ secrets.ACR_LOGIN_SERVER }}/myskillstore-api:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
 
   deploy:
     runs-on: ubuntu-latest
