@@ -127,7 +127,7 @@ export function Navbar({ onSearch, initialSearch = '', onPublishClick, isLoggedI
             <Link 
               href="/products/create" 
               className="hover:text-purple-600 transition"
-              onClick={(e) => onPublishClick && onPublishClick(e)}
+              onClick={(e: React.MouseEvent) => onPublishClick && onPublishClick(e)}
             >
               {isZh ? '技能发布' : 'Publish Skill'}
             </Link>
@@ -200,7 +200,7 @@ export function Navbar({ onSearch, initialSearch = '', onPublishClick, isLoggedI
             <Link 
               href="/products/create" 
               className="text-gray-600 hover:text-purple-600 py-2 border-b border-gray-100"
-              onClick={(e) => handleLinkClick(e, '/products/create')}
+              onClick={(e: React.MouseEvent) => handleLinkClick(e, '/products/create')}
             >
               {isZh ? '技能发布' : 'Publish Skill'}
             </Link>
