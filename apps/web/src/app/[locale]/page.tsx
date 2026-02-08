@@ -110,18 +110,19 @@ export default function HomePage() {
       />
 
       {/* Hero Section */}
-      <section className="pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 text-white overflow-hidden">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+      <section className="pt-32 pb-20 px-6 bg-[#4F46E5] text-white overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 skew-x-12 transform origin-bottom-left"></div>
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left: Text */}
             <div className="text-center lg:text-left">
-              <div className="inline-block px-4 py-1.5 mb-6 text-sm font-medium bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-200">
-                ✨ V7 New Experience
+              <div className="inline-block px-3 py-1 mb-6 text-sm font-medium bg-white/20 rounded-full text-white/90 backdrop-blur-sm border border-white/20">
+                ✨ {isZh ? '全新体验 V7' : 'New Experience V7'}
               </div>
-              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-6">
+              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6 tracking-tight">
                 {t('hero.title')}
               </h1>
-              <p className="text-lg md:text-xl text-purple-100/80 mb-8 leading-relaxed">
+              <p className="text-xl md:text-2xl text-indigo-100 mb-10 leading-relaxed font-light">
                 {t('hero.subtitle')}
               </p>
               
@@ -131,79 +132,72 @@ export default function HomePage() {
                   className="w-full sm:w-auto"
                   onClick={handlePublishClick}
                 >
-                  <Button className="w-full sm:w-auto h-12 md:h-14 bg-white hover:bg-purple-50 text-purple-900 rounded-xl px-10 text-lg font-bold shadow-xl transition-all hover:scale-105 active:scale-95">
+                  <Button className="w-full sm:w-auto h-14 bg-white text-indigo-700 hover:bg-indigo-50 border border-transparent rounded-xl px-8 text-lg font-bold shadow-lg transition-all transform hover:-translate-y-1">
                     {isZh ? '立即发布' : 'Get Started'}
                   </Button>
                 </Link>
                 <Link href="#explore" className="w-full sm:w-auto">
-                  <Button variant="outline" className="w-full sm:w-auto h-12 md:h-14 border-2 border-purple-400/50 text-white hover:bg-white/10 rounded-xl px-10 text-lg font-bold backdrop-blur-sm">
+                  <Button variant="outline" className="w-full sm:w-auto h-14 bg-indigo-700/30 text-white border-2 border-indigo-300 hover:bg-indigo-700/50 hover:border-white rounded-xl px-8 text-lg font-bold backdrop-blur-sm transition-all">
                     {isZh ? '浏览市场' : 'Marketplace'}
                   </Button>
                 </Link>
               </div>
               
-              <div className="mt-8 md:mt-12 flex items-center justify-center lg:justify-start gap-6">
-                <div className="flex -space-x-3">
+              <div className="mt-12 flex items-center justify-center lg:justify-start gap-4 opacity-90">
+                <div className="flex -space-x-4">
                   {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="w-10 h-10 rounded-full border-2 border-purple-800 bg-purple-700 flex items-center justify-center text-xs overflow-hidden">
-                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="avatar" />
+                    <div key={i} className="w-10 h-10 rounded-full border-2 border-indigo-500 bg-indigo-800 overflow-hidden">
+                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`} alt="avatar" />
                     </div>
                   ))}
                 </div>
-                <p className="text-sm text-purple-200/60">
-                  <span className="text-white font-bold">1,000+</span> {isZh ? '位创作者已加入' : 'creators already joined'}
-                </p>
+                <div className="text-sm">
+                  <span className="block font-bold text-lg leading-none">1,000+</span>
+                  <span className="text-indigo-200">{isZh ? '创作者加入' : 'creators joined'}</span>
+                </div>
               </div>
             </div>
             
-            {/* Right: Modern Dashboard Mockup */}
-            <div className="relative group mt-8 lg:mt-0 w-full max-w-lg mx-auto lg:max-w-none">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
-              <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-4 md:p-6 shadow-2xl">
-                <div className="bg-[#0f0f1b] rounded-2xl overflow-hidden shadow-inner border border-white/5">
-                  {/* Mock Browser Header */}
-                  <div className="bg-white/5 px-4 py-3 flex items-center justify-between">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+            {/* Right: Modern Dashboard Mockup (Simplified/Reverted style) */}
+            <div className="relative group mt-10 lg:mt-0 perspective-1000">
+              <div className="absolute inset-0 bg-indigo-600 blur-3xl opacity-40 transform rotate-3 scale-95"></div>
+              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:rotate-1 hover:scale-[1.02]">
+                {/* Browser Bar */}
+                <div className="bg-gray-50 border-b border-gray-100 px-4 py-3 flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                  <div className="ml-4 bg-white px-3 py-1 rounded-md text-xs text-gray-400 flex-1 text-center shadow-sm">myskillstore.ai</div>
+                </div>
+                {/* Content */}
+                <div className="p-6 bg-white">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="font-bold text-gray-900 text-lg">Dashboard</h3>
+                      <p className="text-gray-400 text-xs">Welcome back, Creator</p>
                     </div>
-                    <div className="px-3 py-1 bg-white/5 rounded-md text-[10px] text-white/40 font-mono">
-                      v7.skillstore.app
+                    <div className="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
+                      <Wallet size={20} />
                     </div>
-                    <div className="w-6"></div>
                   </div>
-                  
-                  {/* Dashboard Content */}
-                  <div className="p-5 space-y-6">
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <div className="text-purple-300/50 text-xs mb-1">Total Balance</div>
-                        <div className="text-2xl font-bold">$12,482.00</div>
-                      </div>
-                      <div className="h-12 w-24 flex items-end gap-1">
-                        {[40, 70, 45, 90, 65, 80, 50].map((h, i) => (
-                          <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-purple-500/40 rounded-t-sm"></div>
-                        ))}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-gray-50 p-4 rounded-xl">
+                      <div className="text-gray-500 text-xs mb-1">Total Sales</div>
+                      <div className="text-xl font-bold text-gray-900">$12,450</div>
+                      <div className="text-green-500 text-xs mt-1 flex items-center">
+                        <TrendingUp size={12} className="mr-1" /> +15%
                       </div>
                     </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white/5 rounded-xl p-4 border border-white/5">
-                        <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mb-3">
-                          <TrendingUp className="w-4 h-4 text-purple-400" />
-                        </div>
-                        <div className="text-xs text-white/40">Growth</div>
-                        <div className="text-sm font-bold text-green-400">+24.5%</div>
-                      </div>
-                      <div className="bg-white/5 rounded-xl p-4 border border-white/5">
-                        <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center mb-3">
-                          <Globe className="w-4 h-4 text-indigo-400" />
-                        </div>
-                        <div className="text-xs text-white/40">Global Reach</div>
-                        <div className="text-sm font-bold text-indigo-400">142 Countries</div>
-                      </div>
+                    <div className="bg-gray-50 p-4 rounded-xl">
+                      <div className="text-gray-500 text-xs mb-1">Active Skills</div>
+                      <div className="text-xl font-bold text-gray-900">8</div>
+                      <div className="text-indigo-500 text-xs mt-1">Optimization Active</div>
                     </div>
+                  </div>
+                  <div className="h-24 bg-indigo-50/50 rounded-xl flex items-end justify-between p-2 px-4">
+                     {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
+                       <div key={i} className="w-1/12 bg-indigo-500 rounded-t-sm" style={{ height: `${h}%`, opacity: 0.7 + (i * 0.05) }}></div>
+                     ))}
                   </div>
                 </div>
               </div>
@@ -305,13 +299,14 @@ export default function HomePage() {
           
           <div className="grid md:grid-cols-4 gap-12 relative">
             {/* Connection Line (Hidden on mobile) */}
-            <div className="hidden md:block absolute top-12 left-1/4 right-1/4 h-0.5 border-t-2 border-dashed border-purple-100 -z-0"></div>
+            <div className="hidden md:block absolute top-12 left-[12.5%] right-[12.5%] h-0.5 border-t-2 border-dashed border-purple-200 -z-10" aria-hidden="true"></div>
             
             {steps.map((step, idx) => (
               <div key={idx} className="flex flex-col items-center text-center relative z-10 group">
-                <div className="w-24 h-24 bg-white border-2 border-purple-100 rounded-3xl flex items-center justify-center shadow-sm group-hover:border-purple-500 group-hover:shadow-xl group-hover:shadow-purple-200 group-hover:-translate-y-2 transition-all duration-500 mb-8 rotate-3 group-hover:rotate-0">
+                {/* Icon Container with White Background to hide line behind it */}
+                <div className="w-24 h-24 bg-white border-2 border-purple-100 rounded-3xl flex items-center justify-center shadow-sm group-hover:border-purple-500 group-hover:shadow-xl group-hover:shadow-purple-200 group-hover:-translate-y-2 transition-all duration-500 mb-8 rotate-3 group-hover:rotate-0 relative z-20">
                   <step.icon className="w-10 h-10 text-purple-600" strokeWidth={1.5} />
-                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold border-4 border-white">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold border-4 border-white shadow-sm">
                     {step.num}
                   </div>
                 </div>
