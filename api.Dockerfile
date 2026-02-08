@@ -15,24 +15,34 @@ RUN npm ci
 COPY . .
 
 # 构建后端 API
-RUN date > /app/api_build_date.txt && npm run build --workspace=apps/api
+RUN npm run build --workspace=apps/api
+
+# 检查构建产物
+RUN echo "=== Build output ===" && ls -la /app/apps/api/dist/ && echo "=== Main file ===" && ls -la /app/apps/api/dist/main.js || echo "main.js not found"
 
 # 阶段 2：生产运行环境
 FROM node:20-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-# 统一使用 Render 端口
 ENV PORT=10000
+ENV HOSTNAME="0.0.0.0"
 
-# 复制构建产物和必要的依赖
+# 复制 API 的 package.json 和 package-lock.json
+COPY --from=builder /app/apps/api/package*.json ./
+
+# 复制根目录的 node_modules（包含所有 workspace 依赖）
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+
+# 复制构建产物
 COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/apps/api/package.json ./package.json
 
 # 暴露端口
 EXPOSE 10000
 
-# 启动命令
-CMD ["node", "dist/main"]
+# 添加健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:10000/api', (r) => process.exit(r.statusCode === 200 || r.statusCode === 404 ? 0 : 1)).on('error', () => process.exit(1))"
+
+# 启动命令 - 添加调试日志
+CMD ["sh", "-c", "echo '=== Starting NestJS API ===' && echo \"PORT=$PORT\" && echo \"NODE_ENV=$NODE_ENV\" && ls -la /app/dist/ && node dist/main.js"]
