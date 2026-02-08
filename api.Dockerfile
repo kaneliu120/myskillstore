@@ -28,11 +28,11 @@ ENV PORT=10000
 # 复制构建产物和必要的依赖
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/apps/api/dist ./apps/api/dist
-COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
+COPY --from=builder /app/apps/api/dist ./dist
+COPY --from=builder /app/apps/api/package.json ./package.json
 
 # 暴露端口
 EXPOSE 10000
 
 # 启动命令
-CMD ["node", "apps/api/dist/main"]
+CMD ["node", "dist/main"]
