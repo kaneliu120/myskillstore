@@ -27,4 +27,4 @@ const nextConfig: NextConfig = {
 };
 
 export default withNextIntl(nextConfig);
-// force rebuild 1770395130
+// force rebuild 1770395131
