@@ -8,6 +8,8 @@ async function bootstrap() {
   // 1. 暴力强制 CORS：确保所有响应（包括 404/500）都带有 CORS 头
   app.use((req: any, res: any, next: any) => {
     const allowedOrigins = [
+      'https://myskillstore.dev',
+      'https://www.myskillstore.dev',
       'https://myskillstore-web.onrender.com',
       'https://myskillshop-web.onrender.com',
       'https://skills-store-api-bjbddhaeathndkap.southeastasia-01.azurewebsites.net',
