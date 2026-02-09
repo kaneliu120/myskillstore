@@ -7,6 +7,7 @@ import { Boxes, Search, User, ChevronDown, Check, Menu, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect, useRef } from 'react';
 import AuthModal from '@/components/auth/AuthModal';
+import { useAuth } from '@/components/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
@@ -240,7 +241,7 @@ export function Navbar({ onSearch, initialSearch = '', onPublishClick, isLoggedI
         )}
       </nav>
       
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+      <AuthModal />
     </>
   );
 }
