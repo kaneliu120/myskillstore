@@ -545,15 +545,15 @@ export default function HomePage() {
           </div>
 
           {/* Steps Row with Visual Connectors */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative max-w-5xl mx-auto">
-            {/* Desktop Horizontal Connector Line */}
-            <div className="hidden md:block absolute top-[52px] left-[10%] right-[10%] h-[2px] z-0 opacity-20" 
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative max-w-5xl mx-auto">
+            {/* Desktop Horizontal Connector Line - 仅在大屏显示 */}
+            <div className="hidden lg:block absolute top-[52px] left-[10%] right-[10%] h-[2px] z-0 opacity-20" 
                  style={{ backgroundImage: 'linear-gradient(to right, #7c3aed 50%, transparent 50%)', backgroundSize: '12px 100%' }} />
 
             {steps.map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group relative z-10 w-full">
+              <div key={idx} className="flex flex-col items-center text-center group relative z-10 w-full px-2">
                 {/* Step Icon Container */}
-                <div className="relative mb-8">
+                <div className="relative mb-6">
                   {/* Outer White Card-like Circle */}
                   <div className="w-[100px] h-[100px] md:w-[110px] md:h-[110px] bg-white rounded-3xl flex items-center justify-center shadow-[0_8px_30px_rgb(124,58,237,0.12)] border border-purple-50 group-hover:shadow-[0_12px_40px_rgb(124,58,237,0.2)] transition-all duration-300 transform group-hover:-translate-y-1">
                     <step.icon className="w-10 h-10 text-purple-600" strokeWidth={2} />
@@ -625,8 +625,8 @@ export default function HomePage() {
                   className="w-full flex items-center justify-between p-6 text-left bg-white hover:bg-gray-50 transition-colors"
                   aria-expanded={openFaq === idx}
                 >
-                  <span className="font-semibold text-gray-900 text-lg leading-snug pr-4 flex-1">{faq.q}</span>
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${openFaq === idx ? 'bg-purple-100' : 'bg-gray-100'}`}>
+                  <span className="font-semibold text-gray-900 text-lg leading-snug pr-4 w-full block">{faq.q}</span>
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ml-4 ${openFaq === idx ? 'bg-purple-100' : 'bg-gray-100'}`}>
                     {openFaq === idx ? (
                       <Minus className="w-4 h-4 text-purple-600" />
                     ) : (
