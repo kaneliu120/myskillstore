@@ -491,6 +491,8 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.length > 0 ? (
+              // Display exactly 8 products to form 2 perfect rows on large screens (4 cols x 2 rows)
+              // On smaller screens, it will wrap naturally but stay within a reasonable limit.
               products.slice(0, 8).map(product => (
                 <ProductCard
                   key={product.id}
@@ -498,33 +500,23 @@ export default function HomePage() {
                   title={product.title}
                   price={Number(product.price_usd)}
                   author={product.seller?.nickname || 'Anonymous'}
+                  authorAvatar={product.seller?.avatar_url}
                   category={product.category || 'Other'}
                 />
               ))
             ) : (
               /* Demo Cards when no products */
               <>
-                {demoProducts.map((demo, idx) => (
-                  <div key={idx} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition group">
-                    <div className="relative">
-                      <span className="absolute top-3 left-3 bg-purple-600 text-white text-xs px-3 py-1 rounded-full">
-                        {demo.category}
-                      </span>
-                      <div className={`h-40 ${demo.color} flex items-center justify-center`}>
-                        <Brain className="w-16 h-16 text-purple-300" />
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-900 mb-1 group-hover:text-purple-600 transition">{demo.title}</h3>
-                      <p className="text-sm text-gray-500 mb-3">{isZh ? '创作者：' : 'By '}{demo.author}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold text-purple-600">${demo.price}.00</span>
-                        <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white rounded-full text-xs px-4">
-                          {isZh ? '查看详情' : 'View'}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+                {demoProducts.slice(0, 8).map((demo, idx) => (
+                  <ProductCard
+                    key={idx}
+                    id={`demo-${idx}`}
+                    title={demo.title}
+                    price={demo.price}
+                    author={demo.author}
+                    category={demo.category}
+                    coverUrl={undefined} // Use default placeholder
+                  />
                 ))}
               </>
             )}

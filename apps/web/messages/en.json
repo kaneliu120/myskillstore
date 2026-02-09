@@ -196,5 +196,23 @@
       "qr_hint": "Upload your wallet QR code for easier payments",
       "coins": "Accepted Cryptocurrencies"
     }
+  },
+  "HelpCenter": {
+    "title": "Help Center",
+    "subtitle": "Frequently Asked Questions & Support",
+    "q1": "How do I register or log in?",
+    "a1": "Click the 'Login / Register' button in the top right corner to create a new account or sign in.",
+    "q2": "How do I create and publish my skill?",
+    "a2": "Log in, go to the 'Publish Skill' page, fill in the details, set your price, and upload your files.",
+    "q3": "What are the platform fees?",
+    "a3": "We charge minimal fees to maximize creator earnings. Check the publish page for rates.",
+    "q4": "What payment methods are supported?",
+    "a4": "We support major cryptocurrencies like USDT/USDC. Buyers pay directly to your wallet.",
+    "q5": "How is my IP protected?",
+    "a5": "We use blockchain technology for copyright verification and smart contracts for secure transactions.",
+    "q6": "How are purchased skills delivered?",
+    "a6": "For auto-delivery items, files are sent instantly after payment confirmation. For manual items, the seller will contact you via Telegram.",
+    "still_need_help": "Still need help?",
+    "contact_us": "Contact Us"
   }
 }
