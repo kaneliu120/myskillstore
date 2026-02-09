@@ -570,8 +570,8 @@ export default function HomePage() {
                   {step.title}
                 </h3>
 
-                {/* Description - 强制换行并居中，防止文字过宽 */}
-                <p className="text-gray-500 text-sm leading-relaxed px-2 max-w-[200px] mx-auto text-balance">
+                {/* Description */}
+                <p className="text-gray-500 text-sm leading-relaxed px-4 mx-auto max-w-xs">
                   {step.desc}
                 </p>
               </div>
@@ -625,7 +625,7 @@ export default function HomePage() {
                   className="w-full flex items-center justify-between p-6 text-left bg-white hover:bg-gray-50 transition-colors"
                   aria-expanded={openFaq === idx}
                 >
-                  <span className="font-semibold text-gray-900 text-lg leading-snug pr-8">{faq.q}</span>
+                  <span className="font-semibold text-gray-900 text-lg leading-snug pr-4 flex-1">{faq.q}</span>
                   <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${openFaq === idx ? 'bg-purple-100' : 'bg-gray-100'}`}>
                     {openFaq === idx ? (
                       <Minus className="w-4 h-4 text-purple-600" />
