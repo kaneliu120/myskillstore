@@ -17,7 +17,7 @@ interface Product {
   id: number;
   title: string;
   price_usd: number;
-  seller: { nickname: string };
+  seller: { nickname: string; avatar_url?: string };
   category: string;
 }
 
