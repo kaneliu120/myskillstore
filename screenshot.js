@@ -11,12 +11,12 @@ const puppeteer = require('puppeteer');
   await page.setViewport({ width: 1440, height: 900 });
 
   try {
-    console.log('Navigating to localhost:3000/en...');
-    await page.goto('http://localhost:3000/en', { waitUntil: 'networkidle0', timeout: 30000 });
+    console.log('Navigating to localhost:3000/zh...');
+    await page.goto('http://localhost:3000/zh', { waitUntil: 'networkidle0', timeout: 30000 });
     
     console.log('Taking screenshot...');
-    await page.screenshot({ path: 'homepage-preview.png', fullPage: true });
-    console.log('Screenshot saved to homepage-preview.png');
+    await page.screenshot({ path: 'v7-reverted-preview.png', fullPage: true });
+    console.log('Screenshot saved to v7-reverted-preview.png');
   } catch (e) {
     console.error('Error:', e);
   } finally {

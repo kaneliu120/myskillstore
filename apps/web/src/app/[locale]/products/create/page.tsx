@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/auth/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { 
+import {
   ArrowLeft, Upload, FileText, Link as LinkIcon, Boxes,
   Wallet, DollarSign, Tag, CheckCircle, Info
 } from 'lucide-react';
@@ -36,8 +37,15 @@ export default function CreateProductPage() {
   const locale = useLocale();
   const isZh = locale === 'zh';
   const router = useRouter();
+  const { isLoggedIn, openAuthModal } = useAuth();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      openAuthModal('login');
+    }
+  }, [isLoggedIn, openAuthModal]);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -45,6 +53,7 @@ export default function CreateProductPage() {
     tags: '',
     price: '',
     deliveryType: 'auto',
+    deliveryContent: '',
     wallet: '',
   });
 
@@ -62,6 +71,7 @@ export default function CreateProductPage() {
         tags: formData.tags,
         price_usd: parseFloat(formData.price),
         delivery_type: formData.deliveryType === 'auto' ? 'auto_hosted' : 'manual',
+        delivery_content: formData.deliveryContent,
       });
       router.push('/user');
     } catch (error: any) {
@@ -123,11 +133,10 @@ export default function CreateProductPage() {
                     <button
                       key={cat.id}
                       onClick={() => updateField('category', cat.id)}
-                      className={`p-3 rounded-xl border text-left transition-all ${
-                        formData.category === cat.id
-                          ? 'border-purple-500 bg-purple-50 text-purple-700'
-                          : 'border-gray-200 bg-white text-gray-600 hover:border-purple-200'
-                      }`}
+                      className={`p-3 rounded-xl border text-left transition-all ${formData.category === cat.id
+                        ? 'border-purple-500 bg-purple-50 text-purple-700'
+                        : 'border-gray-200 bg-white text-gray-600 hover:border-purple-200'
+                        }`}
                     >
                       <span className="text-lg">{cat.icon}</span>
                       <p className="text-sm mt-1">{isZh ? cat.labelZh : cat.label}</p>
@@ -160,8 +169,8 @@ export default function CreateProductPage() {
                 <p className="text-xs text-gray-400">{t('step1.tags_hint')}</p>
               </div>
 
-              <Button 
-                onClick={() => setStep(2)} 
+              <Button
+                onClick={() => setStep(2)}
                 className="w-full bg-purple-600 hover:bg-purple-700 rounded-lg h-11"
                 disabled={!formData.title || !formData.category}
               >
@@ -205,11 +214,10 @@ export default function CreateProductPage() {
                     <button
                       key={type.id}
                       onClick={() => updateField('deliveryType', type.id)}
-                      className={`p-4 rounded-xl border text-left transition-all flex items-start gap-4 ${
-                        formData.deliveryType === type.id
-                          ? 'border-purple-500 bg-purple-50'
-                          : 'border-gray-200 bg-white hover:border-purple-200'
-                      }`}
+                      className={`p-4 rounded-xl border text-left transition-all flex items-start gap-4 ${formData.deliveryType === type.id
+                        ? 'border-purple-500 bg-purple-50'
+                        : 'border-gray-200 bg-white hover:border-purple-200'
+                        }`}
                     >
                       <div className={`p-2 rounded-lg ${formData.deliveryType === type.id ? 'bg-purple-100' : 'bg-gray-100'}`}>
                         <type.icon className={`w-5 h-5 ${formData.deliveryType === type.id ? 'text-purple-600' : 'text-gray-500'}`} />
@@ -231,25 +239,57 @@ export default function CreateProductPage() {
               {formData.deliveryType === 'auto' && (
                 <div className="space-y-2">
                   <Label className="text-gray-700">{t('step2.upload')}</Label>
-                  <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-purple-300 transition cursor-pointer bg-gray-50">
+                  <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-purple-300 transition cursor-pointer bg-gray-50 relative">
+                    <input
+                      type="file"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        setLoading(true);
+                        try {
+                          const formData = new FormData();
+                          formData.append('file', file);
+                          const res = await api.post('/upload', formData, {
+                            headers: { 'Content-Type': 'multipart/form-data' }
+                          });
+                          updateField('deliveryContent', res.data.url);
+                          // Show success feedback (simplified)
+                          alert('File uploaded successfully!');
+                        } catch (err) {
+                          console.error('Upload failed', err);
+                          alert('Upload failed');
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                    />
                     <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-                    <p className="text-gray-500">{t('step2.upload_hint')}</p>
+                    <p className="text-gray-500">
+                      {formData.deliveryContent ? 'File uploaded! Click to replace.' : t('step2.upload_hint')}
+                    </p>
+                    {formData.deliveryContent && (
+                      <p className="text-xs text-emerald-600 mt-2 flex items-center justify-center gap-1">
+                        <CheckCircle className="w-3 h-3" /> Uploaded
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
 
               <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => setStep(1)}
                   className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg h-11"
                 >
                   {t('back')}
                 </Button>
-                <Button 
-                  onClick={() => setStep(3)} 
+                <Button
+                  onClick={() => setStep(3)}
                   className="flex-1 bg-purple-600 hover:bg-purple-700 rounded-lg h-11"
-                  disabled={!formData.price}
+                  disabled={!formData.price || (formData.deliveryType === 'auto' && !formData.deliveryContent)}
                 >
                   {t('next')}
                 </Button>
@@ -287,15 +327,15 @@ export default function CreateProductPage() {
               </div>
 
               <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => setStep(2)}
                   className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-lg h-11"
                 >
                   {t('back')}
                 </Button>
-                <Button 
-                  onClick={handleSubmit} 
+                <Button
+                  onClick={handleSubmit}
                   disabled={loading || !formData.wallet}
                   className="flex-1 bg-emerald-600 hover:bg-emerald-700 rounded-lg h-11"
                 >
@@ -311,9 +351,8 @@ export default function CreateProductPage() {
           {[1, 2, 3].map(s => (
             <div
               key={s}
-              className={`h-2 rounded-full transition-all ${
-                s === step ? 'w-8 bg-purple-600' : s < step ? 'w-2 bg-purple-300' : 'w-2 bg-gray-200'
-              }`}
+              className={`h-2 rounded-full transition-all ${s === step ? 'w-8 bg-purple-600' : s < step ? 'w-2 bg-purple-300' : 'w-2 bg-gray-200'
+                }`}
             />
           ))}
         </div>

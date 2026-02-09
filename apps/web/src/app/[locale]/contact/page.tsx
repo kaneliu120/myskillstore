@@ -1,203 +1,200 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocale } from 'next-intl';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
-import { Input } from '@/components/ui/input';
+import { useTranslations, useLocale } from 'next-intl';
+import Link from 'next/link';
+import { Boxes, Mail, Send, Clock, MessageSquare, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MapPin, Mail, Phone, Send } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function ContactPage() {
+  const t = useTranslations('ContactPage');
   const locale = useLocale();
   const isZh = locale === 'zh';
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 1500);
+    // Simulate submit
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setSubmitted(true);
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">
-      <Navbar />
+    <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+              <Boxes className="w-5 h-5 text-white" />
+            </div>
+            <Link href={`/${locale}`} className="text-lg font-bold text-gray-900">
+              MySkillStore
+            </Link>
+          </div>
+          <div className="flex items-center gap-4 text-sm">
+            <Link href={`/${locale}`} className="text-gray-600 hover:text-purple-600 transition">
+              {isZh ? '首页' : 'Home'}
+            </Link>
+            <Link href={`/${locale}/help`} className="text-gray-600 hover:text-purple-600 transition">
+              {isZh ? '帮助中心' : 'Help Center'}
+            </Link>
+            <Link href={`/${locale}/about`} className="text-gray-600 hover:text-purple-600 transition">
+              {isZh ? '关于我们' : 'About'}
+            </Link>
+          </div>
+        </div>
+      </nav>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-purple-900 to-indigo-900 text-white text-center">
-        <div className="container mx-auto max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
-            {isZh ? '联系我们' : 'Contact Us'}
-          </h1>
-          <p className="text-lg md:text-xl text-purple-100/80 max-w-2xl mx-auto">
-            {isZh 
-              ? '无论是产品咨询、技术支持还是商务合作，我们都在这里随时为您解答。'
-              : 'Whether you have a question about features, trials, pricing, need a demo, or anything else, our team is ready to answer all your questions.'}
-          </p>
+      {/* Hero */}
+      <section className="pt-16 pb-12 px-6 bg-gradient-to-br from-purple-50 to-white">
+        <div className="container mx-auto max-w-3xl text-center">
+          <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Mail className="w-8 h-8 text-purple-600" />
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('title')}</h1>
+          <p className="text-lg text-gray-600">{t('subtitle')}</p>
         </div>
       </section>
 
-      {/* Contact Content */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-            
-            {/* Contact Info */}
-            <div>
-              <h2 className="text-3xl font-bold mb-8 text-gray-900">
-                {isZh ? '取得联系' : 'Get in Touch'}
-              </h2>
-              <div className="space-y-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">{isZh ? '邮箱' : 'Email'}</h3>
-                    <p className="text-gray-600">support@myskillshop.com</p>
-                    <p className="text-gray-600">partners@myskillshop.com</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">{isZh ? '电话' : 'Phone'}</h3>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
-                    <p className="text-sm text-gray-500 mt-1">{isZh ? '周一至周五 9am - 6pm' : 'Mon-Fri 9am - 6pm'}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">{isZh ? '地址' : 'Address'}</h3>
-                    <p className="text-gray-600">
-                      123 Innovation Drive, Suite 100<br />
-                      Tech Valley, CA 94043<br />
-                      USA
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Map Placeholder */}
-              <div className="mt-12 w-full h-64 bg-gray-100 rounded-2xl overflow-hidden relative group">
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-400">
-                  <MapPin className="w-8 h-8 mr-2" /> Map Placeholder
-                </div>
-                {/* Normally you'd embed Google Maps iframe here */}
-              </div>
-            </div>
-
+      {/* Content */}
+      <section className="py-12 px-6">
+        <div className="container mx-auto max-w-5xl">
+          <div className="grid md:grid-cols-5 gap-8">
             {/* Contact Form */}
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
-              <h2 className="text-2xl font-bold mb-6">
-                {isZh ? '发送消息' : 'Send us a Message'}
-              </h2>
-              
+            <div className="md:col-span-3">
               {submitted ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Send className="w-8 h-8 text-green-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-green-700 mb-2">
+                <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center shadow-sm">
+                  <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
                     {isZh ? '发送成功！' : 'Message Sent!'}
                   </h3>
-                  <p className="text-gray-600">
-                    {isZh ? '我们会尽快与您联系。' : 'We will get back to you as soon as possible.'}
-                  </p>
-                  <Button 
-                    variant="outline" 
-                    className="mt-6"
-                    onClick={() => setSubmitted(false)}
-                  >
-                    {isZh ? '发送另一条消息' : 'Send Another Message'}
-                  </Button>
+                  <p className="text-gray-600">{t('form_success')}</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">{isZh ? '姓名' : 'Name'}</Label>
-                      <Input 
-                        id="name" 
-                        placeholder={isZh ? '您的姓名' : 'Your name'} 
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      <Label htmlFor="name" className="text-gray-700">{t('form_name')}</Label>
+                      <Input
+                        id="name"
                         required
+                        placeholder={isZh ? '张三' : 'John Doe'}
+                        className="border-gray-200 focus-visible:ring-purple-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">{isZh ? '邮箱' : 'Email'}</Label>
-                      <Input 
-                        id="email" 
-                        type="email" 
-                        placeholder={isZh ? '您的邮箱' : 'your@email.com'}
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                      <Label htmlFor="email" className="text-gray-700">{t('form_email')}</Label>
+                      <Input
+                        id="email"
+                        type="email"
                         required
+                        placeholder="you@example.com"
+                        className="border-gray-200 focus-visible:ring-purple-500"
                       />
                     </div>
                   </div>
-                  
                   <div className="space-y-2">
-                    <Label htmlFor="subject">{isZh ? '主题' : 'Subject'}</Label>
-                    <Input 
-                      id="subject" 
-                      placeholder={isZh ? '这是关于...' : 'What is this about?'} 
-                      value={formData.subject}
-                      onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                    <Label htmlFor="subject" className="text-gray-700">{t('form_subject')}</Label>
+                    <Input
+                      id="subject"
                       required
+                      placeholder={isZh ? '请输入主题' : 'What is this about?'}
+                      className="border-gray-200 focus-visible:ring-purple-500"
                     />
                   </div>
-                  
                   <div className="space-y-2">
-                    <Label htmlFor="message">{isZh ? '消息' : 'Message'}</Label>
-                    <Textarea 
-                      id="message" 
-                      placeholder={isZh ? '请描述您的需求...' : 'Tell us how we can help...'} 
-                      className="min-h-[150px]"
-                      value={formData.message}
-                      onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    <Label htmlFor="message" className="text-gray-700">{t('form_message')}</Label>
+                    <Textarea
+                      id="message"
                       required
+                      rows={5}
+                      placeholder={isZh ? '请输入您的消息...' : 'Tell us more...'}
+                      className="border-gray-200 focus-visible:ring-purple-500 resize-none"
                     />
                   </div>
-                  
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white h-12 text-lg font-medium"
+                  <Button
+                    type="submit"
                     disabled={loading}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg h-11"
                   >
-                    {loading ? (isZh ? '发送中...' : 'Sending...') : (isZh ? '发送消息' : 'Send Message')}
+                    {loading ? (
+                      <span className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        {isZh ? '发送中...' : 'Sending...'}
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <Send className="w-4 h-4" />
+                        {t('form_submit')}
+                      </span>
+                    )}
                   </Button>
                 </form>
               )}
             </div>
 
+            {/* Contact Info Sidebar */}
+            <div className="md:col-span-2 space-y-6">
+              <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                <h3 className="font-bold text-gray-900 mb-5">{t('info_title')}</h3>
+                <div className="space-y-5">
+                  <div className="flex gap-3">
+                    <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{t('email_title')}</div>
+                      <div className="text-sm text-gray-500">support@myskillstore.com</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <MessageSquare className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{t('telegram_title')}</div>
+                      <div className="text-sm text-gray-500">@myskillstore</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-5 h-5 text-amber-600" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{t('hours_title')}</div>
+                      <div className="text-sm text-gray-500">{t('hours_value')}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100">
+                <p className="text-sm text-purple-700">
+                  {t('faq_hint')}{' '}
+                  <Link href={`/${locale}/help`} className="font-medium underline hover:text-purple-900">
+                    {t('faq_link')}
+                  </Link>{' '}
+                  {t('faq_hint_end')}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <Footer />
+      {/* Footer */}
+      <footer className="py-8 bg-[#1a1a2e] text-center">
+        <div className="text-gray-500 text-sm">
+          © 2026 MySkillStore. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }
