@@ -1,6 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { UsersService } from './users/users.service';
+import { UserRole } from './users/entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -50,6 +53,35 @@ async function bootstrap() {
 
   // API prefix
   app.setGlobalPrefix('api');
+
+  // --- Auto-Seed Admin User ---
+  try {
+    const usersService = app.get(UsersService);
+    const adminEmail = 'kane@myskillstore.dev';
+    const existingAdmin = await usersService.findByEmail(adminEmail);
+    
+    if (!existingAdmin) {
+      console.log(`[Seed] Creating admin user: ${adminEmail}`);
+      const hashedPassword = await bcrypt.hash('AdminPassword2026!', 10);
+      await usersService.create({
+        email: adminEmail,
+        password_hash: hashedPassword,
+        nickname: 'SuperAdmin',
+        role: UserRole.ADMIN,
+      });
+      console.log('[Seed] Admin user created successfully.');
+    } else {
+      // Optional: Ensure role is admin if it exists
+      if (existingAdmin.role !== UserRole.ADMIN) {
+        console.log(`[Seed] Promoting user ${adminEmail} to admin.`);
+        await usersService.update(existingAdmin.id, { role: UserRole.ADMIN });
+      }
+      console.log('[Seed] Admin user already exists.');
+    }
+  } catch (error) {
+    console.error('[Seed] Failed to seed admin user:', error);
+  }
+  // ----------------------------
 
   await app.listen(process.env.PORT ?? 8080);
   console.log(`API running on port ${process.env.PORT ?? 8080}`);
