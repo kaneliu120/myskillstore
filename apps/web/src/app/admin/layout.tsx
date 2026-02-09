@@ -7,14 +7,18 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // 默认给后台提供 zh 消息，或者你可以根据逻辑调整
+  // 管理后台强制使用中文消息，或者你可以根据需要动态获取
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      <AuthWrapper>
-        {children}
-      </AuthWrapper>
-    </NextIntlClientProvider>
+    <html lang="zh">
+      <body>
+        <NextIntlClientProvider messages={messages} locale="zh">
+          <AuthWrapper>
+            {children}
+          </AuthWrapper>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
