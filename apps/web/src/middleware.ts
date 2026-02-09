@@ -1,13 +1,13 @@
 import createMiddleware from 'next-intl/middleware';
- 
+
 export default createMiddleware({
   // A list of all locales that are supported
-  locales: ['en', 'zh', 'tl'],
- 
+  locales: ['en', 'zh', 'tl', 'ja', 'ko', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ar', 'tr', 'vi', 'th', 'id', 'hi', 'nl', 'pl'],
+
   // Used when no locale matches
   defaultLocale: 'en'
 });
- 
+
 export const config = {
   // Match all pathnames except for
   // - … if they start with `/api`, `/_next` or `/_vercel`
