@@ -545,13 +545,13 @@ export default function HomePage() {
           </div>
 
           {/* Steps Row with Visual Connectors */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative max-w-5xl mx-auto">
             {/* Desktop Horizontal Connector Line */}
-            <div className="hidden md:block absolute top-[52px] left-[15%] right-[15%] h-[2px] z-0 opacity-20" 
+            <div className="hidden md:block absolute top-[52px] left-[10%] right-[10%] h-[2px] z-0 opacity-20" 
                  style={{ backgroundImage: 'linear-gradient(to right, #7c3aed 50%, transparent 50%)', backgroundSize: '12px 100%' }} />
 
             {steps.map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group relative z-10">
+              <div key={idx} className="flex flex-col items-center text-center group relative z-10 w-full">
                 {/* Step Icon Container */}
                 <div className="relative mb-8">
                   {/* Outer White Card-like Circle */}
@@ -570,8 +570,8 @@ export default function HomePage() {
                   {step.title}
                 </h3>
 
-                {/* Description */}
-                <p className="text-gray-500 text-sm leading-relaxed px-6 md:px-4">
+                {/* Description - 强制换行并居中，防止文字过宽 */}
+                <p className="text-gray-500 text-sm leading-relaxed px-2 max-w-[200px] mx-auto text-balance">
                   {step.desc}
                 </p>
               </div>
@@ -607,34 +607,42 @@ export default function HomePage() {
       {/* FAQ Section (Fixed Mobile Width) */}
       <section id="faq" className="py-20 px-6 bg-white">
         <div className="container mx-auto max-w-3xl">
-          <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">
-            {isZh ? '常见问题' : 'Frequently Asked Questions'}
-          </h2>
-          <div className="w-16 h-1 bg-purple-600 mx-auto mb-12"></div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 tracking-tight">
+              {isZh ? '常见问题' : 'Frequently Asked Questions'}
+            </h2>
+            <div className="w-16 h-1 bg-purple-600 mx-auto"></div>
+          </div>
 
           <div className="space-y-4 w-full">
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="border border-gray-200 rounded-xl overflow-hidden w-full"
+                className="border border-gray-200 rounded-xl overflow-hidden w-full transition-all duration-300 hover:border-purple-200 hover:shadow-sm"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full flex items-center justify-between p-5 md:p-6 text-left hover:bg-gray-50 transition"
+                  className="w-full flex items-center justify-between p-6 text-left bg-white hover:bg-gray-50 transition-colors"
                   aria-expanded={openFaq === idx}
                 >
-                  <span className="font-semibold text-gray-900 leading-snug pr-4">{faq.q}</span>
-                  {openFaq === idx ? (
-                    <Minus className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                  ) : (
-                    <Plus className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                  )}
+                  <span className="font-semibold text-gray-900 text-lg leading-snug pr-8">{faq.q}</span>
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${openFaq === idx ? 'bg-purple-100' : 'bg-gray-100'}`}>
+                    {openFaq === idx ? (
+                      <Minus className="w-4 h-4 text-purple-600" />
+                    ) : (
+                      <Plus className="w-4 h-4 text-gray-500" />
+                    )}
+                  </div>
                 </button>
-                {openFaq === idx && (
-                  <div className="px-5 pb-5 md:px-6 md:pb-6 text-gray-600 text-sm md:text-base leading-relaxed border-t border-gray-50 pt-4">
+                <div 
+                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                    openFaq === idx ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className="px-6 pb-6 text-gray-600 text-base leading-relaxed">
                     {faq.a}
                   </div>
-                )}
+                </div>
               </div>
             ))}
           </div>
