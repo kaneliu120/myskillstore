@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Boxes, Search, User, ChevronDown, Check, Menu, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect, useRef } from 'react';
-import { AuthModal } from '@/components/auth/AuthModal';
+import AuthModal from '@/components/auth/AuthModal';
 import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
