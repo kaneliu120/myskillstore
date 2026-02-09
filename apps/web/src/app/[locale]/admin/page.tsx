@@ -57,7 +57,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = `/${locale}/login`;
+      window.location.href = `/${locale}/admin/login`;
       return;
     }
 
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         // Verify admin access
         const profileRes = await api.get('/auth/profile');
         if (profileRes.data.role !== 'admin') {
-          window.location.href = `/${locale}/user`;
+          window.location.href = `/${locale}/admin/login?error=denied`;
           return;
         }
         setAuthorized(true);
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
         if (usersRes.status === 'fulfilled') setAllUsers(usersRes.value.data);
       } catch (err) {
         console.error('Admin data load failed', err);
-        window.location.href = `/${locale}/login`;
+        window.location.href = `/${locale}/admin/login`;
       } finally {
         setLoading(false);
       }
