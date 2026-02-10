@@ -547,7 +547,7 @@ export default function HomePage() {
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
               {isZh ? '开启智慧之旅' : 'Start Your Journey'}
             </h2>
-            <p className="text-base md:text-xl text-gray-500 max-w-2xl mx-auto font-medium px-4 md:px-0">
+            <p className="text-base md:text-xl text-gray-500 max-w-2xl mx-auto font-medium px-6 md:px-0 block w-full">
               {isZh ? '只需简单四个步骤，将您的知识转化为持续的数字收益' : 'Four simple steps to transform your knowledge into sustainable digital revenue.'}
             </p>
           </div>
@@ -559,7 +559,7 @@ export default function HomePage() {
                  style={{ backgroundImage: 'linear-gradient(to right, #7c3aed 50%, transparent 50%)', backgroundSize: '12px 100%' }} />
 
             {steps.map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group relative z-10 min-w-[200px]">
+              <div key={idx} className="flex flex-col items-center text-center group relative z-10 w-full">
                 {/* Step Icon Container */}
                 <div className="relative mb-8">
                   {/* Outer White Card-like Circle */}
@@ -574,12 +574,12 @@ export default function HomePage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors hyphens-auto break-words w-full px-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors w-full px-4">
                   {step.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-500 text-sm leading-relaxed px-2 md:px-4 whitespace-normal break-words hyphens-auto">
+                <p className="text-gray-500 text-sm leading-relaxed px-4 w-full">
                   {step.desc}
                 </p>
               </div>
@@ -628,11 +628,11 @@ export default function HomePage() {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full grid grid-cols-[1fr_auto] items-start gap-4 p-5 md:p-6 text-left hover:bg-gray-50 transition bg-white"
+                  className="w-full flex items-start justify-between gap-4 p-5 md:p-6 text-left hover:bg-gray-50 transition bg-white"
                   aria-expanded={openFaq === idx}
                 >
-                  <span className="font-semibold text-gray-900 leading-snug break-words hyphens-auto">{faq.q}</span>
-                  <div className="flex-shrink-0 pt-0.5">
+                  <span className="font-semibold text-gray-900 leading-snug flex-1 min-w-0">{faq.q}</span>
+                  <div className="flex-shrink-0 pt-1">
                     {openFaq === idx ? (
                       <Minus className="w-5 h-5 text-purple-600" />
                     ) : (
