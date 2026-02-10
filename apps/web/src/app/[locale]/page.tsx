@@ -552,14 +552,14 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Steps Row with Visual Connectors */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+          {/* Steps Row with Visual Connectors - Optimized Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 relative">
             {/* Desktop Horizontal Connector Line */}
-            <div className="hidden md:block absolute top-[52px] left-[15%] right-[15%] h-[2px] z-0 opacity-20" 
+            <div className="hidden lg:block absolute top-[52px] left-[15%] right-[15%] h-[2px] z-0 opacity-20" 
                  style={{ backgroundImage: 'linear-gradient(to right, #7c3aed 50%, transparent 50%)', backgroundSize: '12px 100%' }} />
 
             {steps.map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group relative z-10">
+              <div key={idx} className="flex flex-col items-center text-center group relative z-10 min-w-[200px]">
                 {/* Step Icon Container */}
                 <div className="relative mb-8">
                   {/* Outer White Card-like Circle */}
@@ -574,12 +574,12 @@ export default function HomePage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors hyphens-auto break-words w-full px-2">
                   {step.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-500 text-sm leading-relaxed px-6 md:px-4">
+                <p className="text-gray-500 text-sm leading-relaxed px-2 md:px-4 whitespace-normal break-words hyphens-auto">
                   {step.desc}
                 </p>
               </div>
@@ -628,18 +628,20 @@ export default function HomePage() {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full flex items-center justify-between p-5 md:p-6 text-left hover:bg-gray-50 transition"
+                  className="w-full grid grid-cols-[1fr_auto] items-start gap-4 p-5 md:p-6 text-left hover:bg-gray-50 transition bg-white"
                   aria-expanded={openFaq === idx}
                 >
-                  <span className="font-semibold text-gray-900 leading-snug pr-4">{faq.q}</span>
-                  {openFaq === idx ? (
-                    <Minus className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                  ) : (
-                    <Plus className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                  )}
+                  <span className="font-semibold text-gray-900 leading-snug break-words hyphens-auto">{faq.q}</span>
+                  <div className="flex-shrink-0 pt-0.5">
+                    {openFaq === idx ? (
+                      <Minus className="w-5 h-5 text-purple-600" />
+                    ) : (
+                      <Plus className="w-5 h-5 text-purple-600" />
+                    )}
+                  </div>
                 </button>
                 {openFaq === idx && (
-                  <div className="px-5 pb-5 md:px-6 md:pb-6 text-gray-600 text-sm md:text-base leading-relaxed border-t border-gray-50 pt-4">
+                  <div className="px-5 pb-5 md:px-6 md:pb-6 text-gray-600 text-sm md:text-base leading-relaxed border-t border-gray-50 pt-4 break-words hyphens-auto whitespace-normal">
                     {faq.a}
                   </div>
                 )}
