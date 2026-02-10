@@ -27,7 +27,20 @@ export class ProductsService {
 
     return this.productsRepository.find({ 
       where,
-      relations: ['seller'],
+      relations: { seller: true },
+      select: {
+        id: true,
+        title: true,
+        price_usd: true,
+        category: true,
+        preview_image_url: true,
+        createdAt: true,
+        seller: {
+          id: true,
+          nickname: true,
+          avatar_url: true,
+        }
+      },
       order: { createdAt: 'DESC' },
     });
   }
@@ -40,7 +53,20 @@ export class ProductsService {
 
     return this.productsRepository.find({
       where,
-      relations: ['seller'],
+      relations: { seller: true },
+      select: {
+        id: true,
+        title: true,
+        price_usd: true,
+        category: true,
+        preview_image_url: true,
+        createdAt: true,
+        seller: {
+          id: true,
+          nickname: true,
+          avatar_url: true,
+        }
+      },
       order: { createdAt: 'DESC' },
     });
   }
