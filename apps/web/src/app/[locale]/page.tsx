@@ -540,10 +540,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Start Your Journey (Fixed Responsive Wrapping) */}
+      {/* Start Your Journey (Enhanced Section) */}
       <section className="py-24 px-6 bg-white overflow-hidden">
         <div className="container mx-auto max-w-6xl relative">
-          <div className="text-center mb-16 relative z-10">
+          <div className="text-center mb-20 relative z-10">
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
               {isZh ? '开启智慧之旅' : 'Start Your Journey'}
             </h2>
@@ -552,36 +552,40 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Steps Row with Visual Connectors - Optimized Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 relative">
-            {/* Desktop Horizontal Connector Line */}
-            <div className="hidden lg:block absolute top-[52px] left-[15%] right-[15%] h-[2px] z-0 opacity-20" 
-                 style={{ backgroundImage: 'linear-gradient(to right, #7c3aed 50%, transparent 50%)', backgroundSize: '12px 100%' }} />
+          {/* Steps Grid with Refined Layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 relative">
+            {/* Visual Connector Line - Optimized Positioning */}
+            <div className="hidden lg:block absolute top-[55px] left-[12%] right-[12%] h-[2px] z-0"
+                 style={{ backgroundImage: 'linear-gradient(to right, #7c3aed 50%, transparent 50%)', backgroundSize: '15px 100%', opacity: 0.15 }} />
 
             {steps.map((step, idx) => (
               <div key={idx} className="flex flex-col items-center text-center group relative z-10 w-full">
-                {/* Step Icon Container */}
-                <div className="relative mb-8">
-                  {/* Outer White Card-like Circle */}
-                  <div className="w-[100px] h-[100px] md:w-[110px] md:h-[110px] bg-white rounded-3xl flex items-center justify-center shadow-[0_8px_30px_rgb(124,58,237,0.12)] border border-purple-50 group-hover:shadow-[0_12px_40px_rgb(124,58,237,0.2)] transition-all duration-300 transform group-hover:-translate-y-1">
-                    <step.icon className="w-10 h-10 text-purple-600" strokeWidth={2} />
+                {/* Step Icon Container with Badge */}
+                <div className="relative mb-10">
+                  <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-[2rem] flex items-center justify-center shadow-[0_20px_50px_rgba(124,58,237,0.1)] border border-purple-50 group-hover:shadow-[0_20px_50px_rgba(124,58,237,0.2)] group-hover:-translate-y-2 transition-all duration-500 ease-out">
+                    <step.icon className="w-10 h-10 md:w-12 md:h-12 text-purple-600" strokeWidth={1.5} />
                   </div>
                   
-                  {/* Step Number Badge */}
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-xs font-bold shadow-lg border-2 border-white">
+                  {/* Improved Step Number Badge */}
+                  <div className="absolute -top-3 -right-3 w-10 h-10 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-sm font-black shadow-xl shadow-purple-200 border-4 border-white rotate-12 group-hover:rotate-0 transition-transform duration-300">
                     {step.num}
                   </div>
                 </div>
 
-                {/* Title */}
+                {/* Title & Description */}
                 <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors w-full px-4">
                   {step.title}
                 </h3>
-
-                {/* Description */}
-                <p className="text-gray-500 text-sm leading-relaxed px-4 w-full">
+                <p className="text-gray-500 text-sm leading-relaxed px-6">
                   {step.desc}
                 </p>
+
+                {/* Mobile Connector - Only visible on small screens */}
+                {idx < steps.length - 1 && (
+                  <div className="lg:hidden mt-8 mb-4">
+                    <div className="w-[2px] h-8 bg-gradient-to-b from-purple-200 to-transparent" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -598,7 +602,7 @@ export default function HomePage() {
             <div className="w-16 h-1 bg-purple-600 mx-auto"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             <BlogSection locale={locale} />
           </div>
 
@@ -612,49 +616,50 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FAQ Section (Fixed Mobile Width) */}
-      <section id="faq" className="py-20 px-6 bg-white">
+      {/* FAQ Section (Optimized with Animations) */}
+      <section id="faq" className="py-24 px-6 bg-gray-50/50">
         <div className="container mx-auto max-w-3xl">
-          <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">
-            {isZh ? '常见问题' : 'Frequently Asked Questions'}
-          </h2>
-          <div className="w-16 h-1 bg-purple-600 mx-auto mb-12"></div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {isZh ? '常见问题' : 'Frequently Asked Questions'}
+            </h2>
+            <p className="text-gray-500 max-w-lg mx-auto">
+              {isZh ? '如果您有其他疑问，请随时联系我们的支持团队' : 'Have more questions? Our support team is here to help.'}
+            </p>
+          </div>
 
           <div className="space-y-4 w-full">
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="border border-gray-200 rounded-xl overflow-hidden w-full"
+                className="group border border-gray-200 rounded-2xl overflow-hidden w-full bg-white hover:border-purple-200 hover:shadow-md transition-all duration-300"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full flex items-start justify-between gap-4 p-5 md:p-6 text-left hover:bg-gray-50 transition bg-white"
+                  className="w-full flex items-start justify-between gap-4 p-6 text-left transition-colors"
                   aria-expanded={openFaq === idx}
                 >
-                  <span className="font-semibold text-gray-900 leading-snug flex-1 min-w-0">{faq.q}</span>
-                  <div className="flex-shrink-0 pt-1">
-                    {openFaq === idx ? (
-                      <Minus className="w-5 h-5 text-purple-600" />
-                    ) : (
-                      <Plus className="w-5 h-5 text-purple-600" />
-                    )}
+                  <span className="font-bold text-gray-900 leading-snug flex-1">{faq.q}</span>
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center transition-transform duration-500 ${openFaq === idx ? 'rotate-180 bg-purple-600 text-white' : 'text-gray-400 group-hover:bg-purple-50 group-hover:text-purple-600'}`}>
+                    <ChevronDown className="w-5 h-5" />
                   </div>
                 </button>
-                {openFaq === idx && (
-                  <div className="px-5 pb-5 md:px-6 md:pb-6 text-gray-600 text-sm md:text-base leading-relaxed border-t border-gray-50 pt-4 break-words hyphens-auto whitespace-normal">
+                
+                <div className={`transition-all duration-500 ease-in-out overflow-hidden ${openFaq === idx ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div className="px-6 pb-6 text-gray-600 text-sm md:text-base leading-relaxed border-t border-gray-50 pt-5">
                     {faq.a}
                   </div>
-                )}
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <p className="text-gray-500 mb-4 text-sm md:text-base">
-              {isZh ? '还有其他问题？' : 'Still have questions?'}
-            </p>
+          {/* Enhanced CTA Area */}
+          <div className="text-center mt-16 p-10 rounded-3xl bg-gradient-to-br from-purple-600 to-indigo-700 text-white shadow-xl shadow-purple-200">
+            <h3 className="text-xl font-bold mb-2">{isZh ? '还有其他问题？' : 'Still have questions?'}</h3>
+            <p className="text-purple-100 mb-8 text-sm opacity-90">{isZh ? '我们的专家团队随时准备为您提供帮助' : 'Our team of experts is ready to assist you.'}</p>
             <Link href={`/${locale}/contact`}>
-              <Button variant="outline" className="border-purple-300 text-purple-600 hover:bg-purple-50 rounded-full px-8">
+              <Button className="bg-white text-purple-600 hover:bg-purple-50 rounded-full px-10 h-12 font-bold shadow-lg">
                 {isZh ? '联系我们' : 'Contact Us'}
               </Button>
             </Link>
