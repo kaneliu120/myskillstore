@@ -100,7 +100,7 @@ export default function BlogSection({ locale }: { locale: string }) {
                             <img src={post.cover_image} alt={post.title} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
                             <div className="absolute top-4 left-4">
                                 <div className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-purple-600 shadow-sm flex items-center gap-1">
-                                    <Clock className=\"w-3 h-3\" />
+                                    <Clock className="w-3 h-3" />
                                     {post.reading_time || '5 min'}
                                 </div>
                             </div>
@@ -118,13 +118,13 @@ export default function BlogSection({ locale }: { locale: string }) {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1 flex flex-col pt-0 px-6 pb-8">
-                        <p className=\"text-gray-500 text-sm line-clamp-2 mb-6 flex-1 leading-relaxed\">
+                        <p className="text-gray-500 text-sm line-clamp-2 mb-6 flex-1 leading-relaxed">
                             {post.excerpt || post.content.substring(0, 100) + '...'}
                         </p>
-                        <Link href={`/${locale}/blog/${post.slug || post.id}`} className=\"inline-flex items-center text-purple-600 hover:text-purple-700 text-sm font-bold transition-all group/link\">
+                        <Link href={`/${locale}/blog/${post.slug || post.id}`} className="inline-flex items-center text-purple-600 hover:text-purple-700 text-sm font-bold transition-all group/link">
                             {isZh ? '阅读更多' : 'Read More'}
-                            <div className=\"ml-2 w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center group-hover/link:bg-purple-600 group-hover/link:text-white transition-all\">
-                                <ArrowRight className=\"w-4 h-4\" />
+                            <div className="ml-2 w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center group-hover/link:bg-purple-600 group-hover/link:text-white transition-all">
+                                <ArrowRight className="w-4 h-4" />
                             </div>
                         </Link>
                     </CardContent>
