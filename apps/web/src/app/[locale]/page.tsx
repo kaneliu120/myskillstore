@@ -535,11 +535,11 @@ export default function HomePage() {
       {/* Start Your Journey (Fixed Responsive Wrapping) */}
       <section className="py-24 px-6 bg-white overflow-hidden">
         <div className="container mx-auto max-w-6xl relative">
-          <div className="text-center mb-16 relative z-10">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
+          <div className="text-center mb-16 relative z-10 w-full px-4">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight break-words">
               {isZh ? '开启智慧之旅' : 'Start Your Journey'}
             </h2>
-            <p className="text-base md:text-xl text-gray-500 max-w-2xl mx-auto font-medium px-4 md:px-0">
+            <p className="text-base md:text-xl text-gray-500 w-full max-w-2xl mx-auto font-medium break-words">
               {isZh ? '只需简单四个步骤，将您的知识转化为持续的数字收益' : 'Four simple steps to transform your knowledge into sustainable digital revenue.'}
             </p>
           </div>
@@ -622,7 +622,7 @@ export default function HomePage() {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full grid grid-cols-[1fr_auto] items-center gap-4 p-6 text-left bg-white hover:bg-gray-50 transition-colors"
+                  className="w-full flex justify-between items-start gap-4 p-6 text-left bg-white hover:bg-gray-50 transition-colors"
                   aria-expanded={openFaq === idx}
                 >
                   <span className="font-semibold text-gray-900 text-lg leading-snug hyphens-auto whitespace-normal">{faq.q}</span>
