@@ -545,13 +545,13 @@ export default function HomePage() {
           </div>
 
           {/* Steps Row with Visual Connectors */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 relative w-full">
             {/* Desktop Horizontal Connector Line - 仅在大屏显示 */}
             <div className="hidden lg:block absolute top-[52px] left-[10%] right-[10%] h-[2px] z-0 opacity-20" 
                  style={{ backgroundImage: 'linear-gradient(to right, #7c3aed 50%, transparent 50%)', backgroundSize: '12px 100%' }} />
 
             {steps.map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group relative z-10 w-full px-2">
+              <div key={idx} className="flex flex-col items-center text-center group relative z-10 min-w-[200px] px-2">
                 {/* Step Icon Container */}
                 <div className="relative mb-6">
                   {/* Outer White Card-like Circle */}
@@ -566,12 +566,12 @@ export default function HomePage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors hyphens-auto whitespace-normal">
                   {step.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-500 text-sm leading-relaxed px-4 mx-auto max-w-xs">
+                <p className="text-gray-500 text-sm leading-relaxed px-4 mx-auto break-words hyphens-auto whitespace-normal">
                   {step.desc}
                 </p>
               </div>
@@ -622,11 +622,11 @@ export default function HomePage() {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full flex items-center justify-between p-6 text-left bg-white hover:bg-gray-50 transition-colors"
+                  className="w-full grid grid-cols-[1fr_auto] items-center gap-4 p-6 text-left bg-white hover:bg-gray-50 transition-colors"
                   aria-expanded={openFaq === idx}
                 >
-                  <span className="font-semibold text-gray-900 text-lg leading-snug pr-4 w-full block">{faq.q}</span>
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ml-4 ${openFaq === idx ? 'bg-purple-100' : 'bg-gray-100'}`}>
+                  <span className="font-semibold text-gray-900 text-lg leading-snug hyphens-auto whitespace-normal">{faq.q}</span>
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${openFaq === idx ? 'bg-purple-100' : 'bg-gray-100'}`}>
                     {openFaq === idx ? (
                       <Minus className="w-4 h-4 text-purple-600" />
                     ) : (
@@ -639,7 +639,7 @@ export default function HomePage() {
                     openFaq === idx ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
-                  <div className="px-6 pb-6 text-gray-600 text-base leading-relaxed">
+                  <div className="px-6 pb-6 text-gray-600 text-base leading-relaxed hyphens-auto whitespace-normal">
                     {faq.a}
                   </div>
                 </div>
