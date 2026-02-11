@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight, Clock } from 'lucide-react';
 import api from '@/lib/api';
 
 interface BlogPost {
@@ -15,6 +14,7 @@ interface BlogPost {
     content: string;
     cover_image: string;
     published_at: string;
+    reading_time?: string;
 }
 
 export default function BlogSection({ locale }: { locale: string }) {
@@ -32,6 +32,7 @@ export default function BlogSection({ locale }: { locale: string }) {
             content: '',
             cover_image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800',
             published_at: new Date().toISOString(),
+            reading_time: '5 min'
         },
         {
             id: 2,
@@ -41,6 +42,7 @@ export default function BlogSection({ locale }: { locale: string }) {
             content: '',
             cover_image: 'https://images.unsplash.com/photo-1676299081847-824916de030a?auto=format&fit=crop&q=80&w=800',
             published_at: new Date().toISOString(),
+            reading_time: '4 min'
         },
         {
             id: 3,
@@ -50,6 +52,7 @@ export default function BlogSection({ locale }: { locale: string }) {
             content: '',
             cover_image: 'https://images.unsplash.com/photo-1684369585053-5e76d338f0be?auto=format&fit=crop&q=80&w=800',
             published_at: new Date().toISOString(),
+            reading_time: '6 min'
         }
     ];
 
@@ -74,35 +77,55 @@ export default function BlogSection({ locale }: { locale: string }) {
     }, [locale]);
 
     if (loading) {
-        return <div className="col-span-1 md:col-span-3 text-center py-8 text-purple-600">Loading insights...</div>;
+        return (
+            <>
+                {[1, 2, 3].map((i) => (
+                    <div key={i} className="animate-pulse">
+                        <div className="bg-gray-200 h-48 rounded-2xl mb-4"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+                        <div className="h-6 bg-gray-200 rounded w-full mb-2"></div>
+                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    </div>
+                ))}
+            </>
+        );
     }
 
     return (
         <>
             {posts.map((post) => (
-                <Card key={post.id} className="hover:shadow-xl transition-all duration-300 flex flex-col h-full border-gray-100 bg-white overflow-hidden group">
+                <Card key={post.id} className="group hover:shadow-2xl transition-all duration-500 flex flex-col h-full border-0 bg-white overflow-hidden rounded-3xl ring-1 ring-gray-100">
                     {post.cover_image && (
-                        <div className="h-48 overflow-hidden">
-                            <img src={post.cover_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
+                        <div className="h-52 overflow-hidden relative">
+                            <img src={post.cover_image} alt={post.title} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
+                            <div className="absolute top-4 left-4">
+                                <div className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-purple-600 shadow-sm flex items-center gap-1">
+                                    <Clock className="w-3 h-3" />
+                                    {post.reading_time || '5 min'}
+                                </div>
+                            </div>
                         </div>
                     )}
-                    <CardHeader className="pb-2">
-                        <div className="flex items-center gap-2 text-xs text-gray-400 mb-2">
-                            <Calendar className="w-3 h-3" />
-                            <span>{new Date(post.published_at).toLocaleDateString()}</span>
+                    <CardHeader className="pb-2 pt-6 px-6">
+                        <div className="flex items-center gap-2 text-xs text-gray-400 mb-3">
+                            <Calendar className="w-3.5 h-3.5" />
+                            <span>{new Date(post.published_at).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                         </div>
-                        <CardTitle className="text-lg font-bold leading-snug group-hover:text-purple-600 transition-colors">
+                        <CardTitle className="text-xl font-bold leading-snug group-hover:text-purple-600 transition-colors duration-300">
                             <Link href={`/${locale}/blog/${post.slug || post.id}`}>
                                 {post.title}
                             </Link>
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="flex-1 flex flex-col pt-0">
-                        <p className="text-gray-500 text-sm line-clamp-3 mb-6 flex-1 leading-relaxed">
+                    <CardContent className="flex-1 flex flex-col pt-0 px-6 pb-8">
+                        <p className="text-gray-500 text-sm line-clamp-2 mb-6 flex-1 leading-relaxed">
                             {post.excerpt || post.content.substring(0, 100) + '...'}
                         </p>
-                        <Link href={`/${locale}/blog/${post.slug || post.id}`} className="inline-flex items-center text-purple-600 hover:text-purple-700 text-sm font-semibold transition-colors">
-                            {isZh ? '阅读更多' : 'Read More'} <ArrowRight className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" />
+                        <Link href={`/${locale}/blog/${post.slug || post.id}`} className="inline-flex items-center text-purple-600 hover:text-purple-700 text-sm font-bold transition-all group/link">
+                            {isZh ? '阅读更多' : 'Read More'}
+                            <div className="ml-2 w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center group-hover/link:bg-purple-600 group-hover/link:text-white transition-all">
+                                <ArrowRight className="w-4 h-4" />
+                            </div>
                         </Link>
                     </CardContent>
                 </Card>

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* 🛠️ Fix: Tell Tailwind where to look for classes */
+@source "../../**/*.{js,ts,jsx,tsx}";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -11,19 +14,12 @@
 
   /* Spacing Tokens */
   --spacing-xs: 0.25rem;
-  /* 4px */
   --spacing-sm: 0.5rem;
-  /* 8px */
   --spacing-md: 1rem;
-  /* 16px */
   --spacing-lg: 1.5rem;
-  /* 24px */
   --spacing-xl: 2rem;
-  /* 32px */
   --spacing-2xl: 3rem;
-  /* 48px */
   --spacing-3xl: 4rem;
-  /* 64px */
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
