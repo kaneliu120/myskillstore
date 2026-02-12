@@ -60,9 +60,9 @@ async function bootstrap() {
     const adminEmail = 'kane@myskillstore.dev';
     const existingAdmin = await usersService.findByEmail(adminEmail);
     
+    const hashedPassword = await bcrypt.hash('AdminPassword2026!', 10);
     if (!existingAdmin) {
       console.log(`[Seed] Creating admin user: ${adminEmail}`);
-      const hashedPassword = await bcrypt.hash('AdminPassword2026!', 10);
       await usersService.create({
         email: adminEmail,
         password_hash: hashedPassword,
@@ -71,10 +71,17 @@ async function bootstrap() {
       });
       console.log('[Seed] Admin user created successfully.');
     } else {
-      // Optional: Ensure role is admin if it exists
+      // Ensure role is admin AND password_hash is set
+      const updates: Partial<any> = {};
       if (existingAdmin.role !== UserRole.ADMIN) {
-        console.log(`[Seed] Promoting user ${adminEmail} to admin.`);
-        await usersService.update(existingAdmin.id, { role: UserRole.ADMIN });
+        updates.role = UserRole.ADMIN;
+      }
+      if (!existingAdmin.password_hash) {
+        updates.password_hash = hashedPassword;
+        console.log('[Seed] Fixing missing password_hash for admin user.');
+      }
+      if (Object.keys(updates).length > 0) {
+        await usersService.update(existingAdmin.id, updates);
       }
       console.log('[Seed] Admin user already exists.');
     }
