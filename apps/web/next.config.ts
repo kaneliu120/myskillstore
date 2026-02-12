@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     // ⚠️ 终极方案：对接 Azure API
-    const apiUrl = 'https://skills-store-api-bjbddhaeathndkap.southeastasia-01.azurewebsites.net';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://skills-store-api-bjbddhaeathndkap.southeastasia-01.azurewebsites.net';
     
     console.log(`[Next.js Rewrite] Configuring proxy to: ${apiUrl}`);
 
